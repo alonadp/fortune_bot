@@ -190,6 +190,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     document.getElementById('card').style.display = 'none';
     document.getElementById('rune').style.display = 'none';
     document.getElementById('questionMark').style.display = 'none';
+    document.querySelector('.fortune-display').style.display = 'flex';
     document.getElementById('prediction').style.display = 'block';
     document.getElementById('prediction').innerHTML = '<p>Нажми, чтобы узнать свою судьбу</p>';
     document.getElementById('actionBtn').querySelector('span').textContent = 'Узнать';
@@ -308,6 +309,10 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     setTimeout(() => {
       haptic('medium');
       
+      // Hide question mark and collapse display area, show prediction in its place
+      document.getElementById('questionMark').style.display = 'none';
+      document.querySelector('.fortune-display').style.display = 'none';
+      document.getElementById('prediction').style.display = 'block';
       document.getElementById('prediction').innerHTML = `<p>${predictionText}</p>`;
       addToHistory('День', predictionText);
       
