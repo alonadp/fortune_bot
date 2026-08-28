@@ -189,6 +189,8 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     document.getElementById('coin').style.display = 'none';
     document.getElementById('card').style.display = 'none';
     document.getElementById('rune').style.display = 'none';
+    document.getElementById('questionMark').style.display = 'none';
+    document.getElementById('prediction').style.display = 'block';
     document.getElementById('prediction').innerHTML = '<p>Нажми, чтобы узнать свою судьбу</p>';
     document.getElementById('actionBtn').querySelector('span').textContent = 'Узнать';
     
@@ -202,13 +204,18 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     // Show appropriate element
     if (currentMode === 'yesno') {
       document.getElementById('coin').style.display = 'block';
+      document.getElementById('questionMark').style.display = 'none';
     } else if (currentMode === 'day') {
-      // Для "на день" не показываем монету, только текст
+      // Для "на день" показываем знак вопроса
       document.getElementById('coin').style.display = 'none';
+      document.getElementById('questionMark').style.display = 'flex';
+      document.getElementById('prediction').style.display = 'none';
     } else if (currentMode === 'taro') {
       document.getElementById('card').style.display = 'block';
+      document.getElementById('questionMark').style.display = 'none';
     } else if (currentMode === 'rune') {
       document.getElementById('rune').style.display = 'block';
+      document.getElementById('questionMark').style.display = 'none';
     }
     
     // Show/hide history
