@@ -10,7 +10,7 @@
 <body>
   <div class="container">
     <header>
-      <svg class="mystical-symbol" width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <svg class="mystical-symbol" width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
         <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
         <path d="M24 8 L26 22 L40 24 L26 26 L24 40 L22 26 L8 24 L22 22 Z" fill="currentColor" opacity="0.5"/>
         <circle cx="24" cy="24" r="3" fill="currentColor"/>
@@ -23,8 +23,8 @@
       <!-- Выбор типа гадания -->
       <div class="modes" id="modesScreen">
         <!-- Hero Card: Монетка -->
-        <button class="hero-card mode-btn" data-mode="yesno">
-          <div class="coin-preview">
+        <button class="hero-card mode-btn" data-mode="yesno" aria-label="Открыть гадание на монетке: Да или Нет">
+          <div class="coin-preview" aria-hidden="true">
             <div class="coin-mini">
               <div class="coin-face">
                 <span class="coin-text">ДА</span>
@@ -39,30 +39,28 @@
 
         <!-- Grid Cards -->
         <div class="grid-cards">
-          <button class="card-item mode-btn" data-mode="taro">
-            <div class="tarot-preview">
+          <button class="card-item mode-btn" data-mode="taro" aria-label="Открыть гадание на картах Таро">
+            <div class="tarot-preview" aria-hidden="true">
               <div class="tarot-card-mini">
                 <div class="tarot-card-back"></div>
               </div>
             </div>
             <h3>Карта дня</h3>
-            <p>Таро</p>
           </button>
 
-          <button class="card-item mode-btn" data-mode="rune">
-            <div class="rune-preview">
+          <button class="card-item mode-btn" data-mode="rune" aria-label="Открыть гадание на рунах">
+            <div class="rune-preview" aria-hidden="true">
               <svg class="rune-symbol" width="48" height="48" viewBox="0 0 48 48">
                 <text x="24" y="36" text-anchor="middle" font-size="32" fill="currentColor">ᚠ</text>
               </svg>
             </div>
             <h3>Руна дня</h3>
-            <p>Elder Futhark</p>
           </button>
         </div>
 
         <!-- Wide Card: Прогноз -->
-        <button class="wide-card mode-btn" data-mode="day">
-          <svg class="celestial-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <button class="wide-card mode-btn" data-mode="day" aria-label="Получить прогноз на день">
+          <svg class="celestial-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
             <path d="M16 2 L18 14 L30 16 L18 18 L16 30 L14 18 L2 16 L14 14 Z" stroke="currentColor" stroke-width="1.5"/>
             <circle cx="16" cy="16" r="3" fill="currentColor"/>
           </svg>
