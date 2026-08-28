@@ -583,7 +583,7 @@ main {
 .pip {
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #EDE9F8, #B8A1E8 75%);
-  box-shadow: 0 0 6px rgba(184, 161, 232, 0.45);
+  box-shadow: 0 0 4px rgba(184, 161, 232, 0.3);
   align-self: center;
   justify-self: center;
 }
@@ -613,6 +613,11 @@ main {
 .dice-mini .pip:nth-child(2) { grid-area: 2 / 2; }
 .dice-mini .pip:nth-child(3) { grid-area: 3 / 3; }
 
+/* Keep the dice card subtitle clear of the chevron on narrow screens */
+.wide-card[data-mode="dice"] .card-content {
+  padding-right: 30px;
+}
+
 /* Big 3D dice on its screen */
 .dice-scene {
   --dice-size: 132px;
@@ -620,15 +625,36 @@ main {
   height: var(--dice-size);
   perspective: 900px;
   position: relative;
+  transition: transform 320ms ease;
 }
 
-/* Very soft violet/indigo glow behind the dice */
+/* Slightly smaller after the result to give the thought room */
+.dice-scene--settled {
+  transform: scale(0.94);
+}
+
+/* Very soft violet glow behind the dice */
 .dice-scene::before {
   content: '';
   position: absolute;
   inset: -34px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(126, 87, 194, 0.16), rgba(67, 76, 170, 0.08) 45%, transparent 68%);
+  background: radial-gradient(circle, rgba(115, 75, 185, 0.12), transparent 65%);
+  pointer-events: none;
+}
+
+/* Soft contact shadow: the dice floats above the surface */
+.dice-scene::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -36px;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(70, 45, 110, 0.22);
+  filter: blur(18px);
   pointer-events: none;
 }
 
@@ -649,13 +675,41 @@ main {
   background:
     radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.05), transparent 55%),
     linear-gradient(145deg, #24222F, #14131C);
-  border: 1px solid rgba(184, 161, 232, 0.28);
+  border: 1px solid rgba(185, 160, 225, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   padding: 17%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+/* Per-face lighting for a sense of volume (same palette, different light) */
+.dice-face--1 {
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.06), transparent 55%),
+    linear-gradient(145deg, #2A2836, #1A1924);
+}
+
+.dice-face--2,
+.dice-face--5,
+.dice-face--6 {
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.04), transparent 55%),
+    linear-gradient(145deg, #1F1D2A, #121118);
+}
+
+.dice-face--3 {
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.05), transparent 55%),
+    linear-gradient(180deg, #222533, #14151E);
+}
+
+.dice-face--4 {
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.03), transparent 55%),
+    linear-gradient(145deg, #1B1A25, #100F16);
 }
 
 .dice-face .pip {
@@ -719,30 +773,92 @@ main {
   margin: -12px 24px 8px;
 }
 
-/* Dice result inside the prediction card */
-.prediction--reveal {
-  animation: fadeInUp 320ms ease-out;
+/* === Dice screen composition === */
+
+/* Hide the big home hero only while the dice screen is open */
+body.hide-home-hero header {
+  display: none;
 }
 
-.prediction .dice-number {
-  font-size: 34px;
-  font-weight: 600;
-  color: var(--lavender);
-  line-height: 1;
-  margin-bottom: 12px;
+/* Compact heading: back → title → subtitle → dice */
+.fortune.screen--dice h2 {
+  margin: 8px 0 clamp(16px, 3vh, 24px);
+  padding: 0 20px;
+  border-bottom: none;
+}
+
+.fortune.screen--dice .fortune-subtitle {
+  margin: 0 24px;
+}
+
+.fortune.screen--dice .fortune-display {
+  height: auto;
+  margin: clamp(45px, 8vh, 70px) 0 clamp(40px, 7vh, 60px);
+}
+
+/* CTA: clearly active, deep muted violet */
+.fortune.screen--dice .btn-primary {
+  background: rgba(105, 85, 145, 0.85);
+  border: 1px solid rgba(190, 165, 230, 0.15);
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.fortune.screen--dice .btn-primary:active {
+  transform: scale(0.985);
+}
+
+.fortune.screen--dice .btn-primary:disabled {
+  opacity: 0.7;
+}
+
+/* Result card in the existing glass language */
+.fortune.screen--dice .prediction {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(180, 155, 220, 0.12);
+  border-radius: 22px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 22px;
+  margin: 0 16px 20px;
+  box-shadow: none;
+}
+
+.prediction--reveal {
+  animation: fadeInUp 340ms ease-out;
+}
+
+.prediction .dice-caption {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(200, 185, 225, 0.6);
+  margin-bottom: 10px;
 }
 
 .prediction .dice-thought {
-  font-size: 16px;
-  line-height: 1.55;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-@media (max-width: 340px) {
+@media (max-width: 360px) {
   .dice-scene {
-    --dice-size: 110px;
+    --dice-size: 116px;
   }
-  .dice-face { border-radius: 16px; }
-  .dice-face .pip { width: 12px; height: 12px; }
+  .dice-face { border-radius: 17px; }
+  .dice-face .pip { width: 13px; height: 13px; }
+  .prediction .dice-thought { font-size: 18px; }
+}
+
+@media (max-width: 330px) {
+  .dice-scene {
+    --dice-size: 104px;
+  }
+  .dice-face { border-radius: 15px; }
+  .dice-face .pip { width: 11px; height: 11px; }
 }
 
 /* Fortune Screen with Page Transition + Screen Themes */

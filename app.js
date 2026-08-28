@@ -283,6 +283,8 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     document.getElementById('modesScreen').style.display = 'none';
     document.getElementById('fortuneScreen').style.display = 'flex';
     setScreenTheme(currentMode);
+    // The dice screen starts compactly, without the big home hero
+    document.body.classList.toggle('hide-home-hero', currentMode === 'dice');
     
     const titles = {
       yesno: 'Монетка судьбы',
@@ -349,6 +351,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 // Back button
 document.getElementById('backBtn').addEventListener('click', () => {
   haptic('select');
+  document.body.classList.remove('hide-home-hero');
   document.getElementById('modesScreen').style.display = 'flex';
   document.getElementById('fortuneScreen').style.display = 'none';
   currentMode = null;
@@ -376,33 +379,45 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     // Thought Dice: physical number is always shown; the thought may be absurd
     if (DiceThought.rolling) return;
     DiceThought.rolling = true;
+    actionBtn.querySelector('span').textContent = 'Кубик думает…';
 
     const rollResult = DiceThought.roll();
     const scene = document.getElementById('diceScene');
 
-    if (scene && !DiceThought.prefersReducedMotion()) {
-      scene.classList.remove('dice-scene--rolling');
-      void scene.offsetWidth;
-      scene.style.animationDuration = rollResult.duration + 'ms';
-      scene.classList.add('dice-scene--rolling');
+    if (scene) {
+      scene.classList.remove('dice-scene--settled');
+      if (!DiceThought.prefersReducedMotion()) {
+        scene.classList.remove('dice-scene--rolling');
+        void scene.offsetWidth;
+        scene.style.animationDuration = rollResult.duration + 'ms';
+        scene.classList.add('dice-scene--rolling');
+      }
     }
 
     setTimeout(() => {
       haptic('select');
-      if (scene) scene.classList.remove('dice-scene--rolling');
+      if (scene) {
+        scene.classList.remove('dice-scene--rolling');
+        scene.classList.add('dice-scene--settled');
+      }
 
       const thought = DiceThought.pickThought(rollResult.value);
       const prediction = document.getElementById('prediction');
-      prediction.innerHTML = `<p class="dice-number">${rollResult.value}</p><p class="dice-thought">${thought ? thought.text : 'Мысль потерялась по дороге. Брось ещё раз.'}</p>`;
+      prediction.innerHTML = `<p class="dice-caption">Твоя мысль</p><p class="dice-thought">${thought ? thought.text : 'Мысль потерялась по дороге. Брось ещё раз.'}</p>`;
       prediction.style.display = 'block';
       prediction.classList.remove('prediction--reveal');
       void prediction.offsetWidth;
       prediction.classList.add('prediction--reveal');
 
+      // Gently reveal the result only if it sits below the viewport
+      if (prediction.getBoundingClientRect().bottom > window.innerHeight) {
+        prediction.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
       DiceThought.rolling = false;
       actionBtn.disabled = false;
       actionBtn.querySelector('span').textContent = 'Бросить ещё раз';
-    }, rollResult.duration + 80);
+    }, rollResult.duration + 150);
 
   } else if (currentMode === 'yesno') {
     // Coin flip - YES/NO only
