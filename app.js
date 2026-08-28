@@ -1,129 +1,179 @@
-// Инициализация Telegram WebApp
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
+// Safe Telegram WebApp initialization
+let tg = null;
+try {
+  if (window.Telegram && window.Telegram.WebApp) {
+    tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+  }
+} catch (e) {
+  console.log('Telegram WebApp not available');
+}
 
-// Предсказания
+// Safe haptic feedback helper
+function haptic(type = 'light') {
+  try {
+    if (tg && tg.HapticFeedback) {
+      if (type === 'light') {
+        tg.HapticFeedback.impactOccurred('light');
+      } else if (type === 'medium') {
+        tg.HapticFeedback.impactOccurred('medium');
+      } else if (type === 'select') {
+        tg.HapticFeedback.selectionChanged();
+      }
+    }
+  } catch (e) {
+    // Fail silently
+  }
+}
+
+// Data
+let tarotData = [];
+let runesData = [];
+
+// Load data
+async function loadData() {
+  try {
+    const [tarotResponse, runesResponse] = await Promise.all([
+      fetch('data/tarot.json'),
+      fetch('data/runes.json')
+    ]);
+    tarotData = await tarotResponse.json();
+    runesData = await runesResponse.json();
+  } catch (error) {
+    console.error('Failed to load data:', error);
+    // Fallback to embedded data
+    tarotData = [
+      { nameRu: "Шут", number: "0", shortMeaning: "Новое начало, спонтанность, приключения" },
+      { nameRu: "Маг", number: "I", shortMeaning: "Сила воли, мастерство, возможности" },
+      { nameRu: "Жрица", number: "II", shortMeaning: "Интуиция, тайны, подсознание" },
+      { nameRu: "Императрица", number: "III", shortMeaning: "Плодородие, изобилие, творчество" },
+      { nameRu: "Император", number: "IV", shortMeaning: "Власть, структура, контроль" },
+      { nameRu: "Иерофант", number: "V", shortMeaning: "Традиции, духовность, обучение" },
+      { nameRu: "Влюблённые", number: "VI", shortMeaning: "Выбор, гармония, отношения" },
+      { nameRu: "Колесница", number: "VII", shortMeaning: "Движение вперёд, победа, решимость" },
+      { nameRu: "Сила", number: "VIII", shortMeaning: "Внутренняя сила, терпение, сострадание" },
+      { nameRu: "Отшельник", number: "IX", shortMeaning: "Поиск истины, одиночество, мудрость" },
+      { nameRu: "Колесо Фортуны", number: "X", shortMeaning: "Перемены, судьба, поворотный момент" },
+      { nameRu: "Справедливость", number: "XI", shortMeaning: "Баланс, правда, закон" },
+      { nameRu: "Повешенный", number: "XII", shortMeaning: "Жертва, пауза, новый взгляд" },
+      { nameRu: "Смерть", number: "XIII", shortMeaning: "Трансформация, конец и начало" },
+      { nameRu: "Умеренность", number: "XIV", shortMeaning: "Баланс, терпение, гармония" },
+      { nameRu: "Дьявол", number: "XV", shortMeaning: "Искушение, зависимость, материализм" },
+      { nameRu: "Башня", number: "XVI", shortMeaning: "Внезапные перемены, разрушение, пробуждение" },
+      { nameRu: "Звезда", number: "XVII", shortMeaning: "Надежда, вдохновение, духовность" },
+      { nameRu: "Луна", number: "XVIII", shortMeaning: "Иллюзии, страхи, подсознание" },
+      { nameRu: "Солнце", number: "XIX", shortMeaning: "Радость, успех, позитив" },
+      { nameRu: "Суд", number: "XX", shortMeaning: "Возрождение, призыв, пробуждение" }
+    ];
+    
+    runesData = [
+      { nameRu: "Феху", symbol: "ᚠ", shortMeaning: "Богатство, изобилие, новые начинания" },
+      { nameRu: "Уруз", symbol: "ᚢ", shortMeaning: "Сила, здоровье, жизненная энергия" },
+      { nameRu: "Турисаз", symbol: "ᚦ", shortMeaning: "Защита, разрушение препятствий" },
+      { nameRu: "Ансуз", symbol: "ᚨ", shortMeaning: "Мудрость, общение, вдохновение" },
+      { nameRu: "Райдо", symbol: "ᚱ", shortMeaning: "Путешествие, движение, прогресс" },
+      { nameRu: "Кеназ", symbol: "ᚲ", shortMeaning: "Огонь, творчество, знание" },
+      { nameRu: "Гебо", symbol: "ᚷ", shortMeaning: "Дар, партнёрство, баланс" },
+      { nameRu: "Вуньо", symbol: "ᚹ", shortMeaning: "Радость, успех, гармония" },
+      { nameRu: "Хагалаз", symbol: "ᚺ", shortMeaning: "Перемены, трансформация, испытание" },
+      { nameRu: "Наутиз", symbol: "ᚾ", shortMeaning: "Нужда, терпение, выносливость" },
+      { nameRu: "Иса", symbol: "ᛁ", shortMeaning: "Лёд, пауза, размышление" },
+      { nameRu: "Йера", symbol: "ᛃ", shortMeaning: "Урожай, результат, цикл" },
+      { nameRu: "Эйваз", symbol: "ᛇ", shortMeaning: "Защита, выносливость, связь" },
+      { nameRu: "Пертро", symbol: "ᛈ", shortMeaning: "Тайна, шанс, судьба" },
+      { nameRu: "Альгиз", symbol: "ᛉ", shortMeaning: "Защита, интуиция, высшая сила" },
+      { nameRu: "Соулу", symbol: "ᛊ", shortMeaning: "Солнце, успех, энергия" },
+      { nameRu: "Тейваз", symbol: "ᛏ", shortMeaning: "Победа, справедливость, лидерство" },
+      { nameRu: "Беркана", symbol: "ᛒ", shortMeaning: "Рост, рождение, обновление" },
+      { nameRu: "Эваз", symbol: "ᛖ", shortMeaning: "Движение, прогресс, доверие" },
+      { nameRu: "Манназ", symbol: "ᛗ", shortMeaning: "Человек, сообщество, самосознание" },
+      { nameRu: "Лагуз", symbol: "ᛚ", shortMeaning: "Вода, эмоции, поток" },
+      { nameRu: "Ингуз", symbol: "ᛜ", shortMeaning: "Плодородие, завершение, потенциал" },
+      { nameRu: "Отала", symbol: "ᛟ", shortMeaning: "Наследие, дом, традиции" },
+      { nameRu: "Дагаз", symbol: "ᛞ", shortMeaning: "День, прорыв, ясность" }
+    ];
+  }
+}
+
+// Predictions for Yes/No and Daily
 const predictions = {
   yesno: {
-    heads: [
-      "Да, сегодня твой день! ✨",
-      "Удача на твоей стороне! 🍀",
-      "Смело действуй — всё получится! 🚀",
-      "Звёзды говорят: ДА! ⭐",
-      "Твои усилия окупятся! 💪"
+    yes: [
+      "Да, сегодня твой день!",
+      "Удача на твоей стороне!",
+      "Смело действуй — всё получится!",
+      "Звёзды говорят: ДА!",
+      "Твои усилия окупятся!"
     ],
-    tails: [
-      "Не сейчас, но скоро! ⏳",
-      "Лучше подождать немного... 🌙",
-      "Звёзды говорят: НЕТ... пока что 🔮",
-      "Пересмотри свой план 🤔",
-      "Удача придёт позже! 💫"
+    no: [
+      "Не сейчас, но скоро!",
+      "Лучше подождать немного...",
+      "Звёзды говорят: НЕТ... пока что",
+      "Пересмотри свой план",
+      "Удача придёт позже!"
     ]
   },
   day: [
-    "Сегодня день новых возможностей! Действуй смело. 🌟",
-    "Возможны неожиданные перемены — будь готов! 🌀",
-    "Хороший день для важных решений. Доверься интуиции. 💡",
-    "День спокойствия и размышлений. Не торопи события. 🌙",
-    "Энергичный день! Используй его для активных действий. ⚡",
-    "Возможны небольшие препятствия, но ты справишься! 💪",
-    "День удачи и сюрпризов. Будь открыт новому! 🎁"
-  ],
-  taro: [
-    { name: "Шут", meaning: "Новое начало, спонтанность, приключения 🃏" },
-    { name: "Маг", meaning: "Сила воли, мастерство, возможности ✨" },
-    { name: "Жрица", meaning: "Интуиция, тайны, подсознание 🌙" },
-    { name: "Императрица", meaning: "Плодородие, изобилие, творчество 👑" },
-    { name: "Император", meaning: "Власть, структура, контроль 🏛" },
-    { name: "Влюблённые", meaning: "Выбор, гармония, отношения 💕" },
-    { name: "Колесница", meaning: "Движение вперёд, победа, решимость 🏆" },
-    { name: "Сила", meaning: "Внутренняя сила, терпение, сострадание 🦁" },
-    { name: "Отшельник", meaning: "Поиск истины, одиночество, мудрость 🕯" },
-    { name: "Колесо Фортуны", meaning: "Перемены, судьба, поворотный момент 🎡" },
-    { name: "Справедливость", meaning: "Баланс, правда, закон ⚖" },
-    { name: "Повешенный", meaning: "Жертва, пауза, новый взгляд 🙃" },
-    { name: "Смерть", meaning: "Трансформация, конец и начало 🦋" },
-    { name: "Умеренность", meaning: "Баланс, терпение, гармония ⚖" },
-    { name: "Дьявол", meaning: "Искушение, зависимость, материализм 😈" },
-    { name: "Башня", meaning: "Внезапные перемены, разрушение, пробуждение ⚡" },
-    { name: "Звезда", meaning: "Надежда, вдохновение, духовность ⭐" },
-    { name: "Луна", meaning: "Иллюзии, страхи, подсознание 🌙" },
-    { name: "Солнце", meaning: "Радость, успех, позитив ☀" },
-    { name: "Суд", meaning: "Возрождение, призыв, пробуждение 🔔" },
-    { name: "Мир", meaning: "Завершение, целостность, путешествие 🌍" }
-  ],
-  rune: [
-    { name: "Fehu (Феху)", meaning: "Богатство, изобилие, новые начинания 💰" },
-    { name: "Uruz (Уруз)", meaning: "Сила, здоровье, жизненная энергия 💪" },
-    { name: "Thurisaz (Турисаз)", meaning: "Защита, разрушение препятствий 🛡" },
-    { name: "Ansuz (Ансуз)", meaning: "Мудрость, общение, вдохновение 📖" },
-    { name: "Raido (Райдо)", meaning: "Путешествие, движение, прогресс 🚗" },
-    { name: "Kenaz (Кеназ)", meaning: "Огонь, творчество, знание 🔥" },
-    { name: "Gebo (Гебо)", meaning: "Дар, партнёрство, баланс 🎁" },
-    { name: "Wunjo (Вуньо)", meaning: "Радость, успех, гармония 😊" },
-    { name: "Hagalaz (Хагалаз)", meaning: "Перемены, трансформация, испытание ❄" },
-    { name: "Nauthiz (Наутиз)", meaning: "Нужда, терпение, выносливость ⏳" },
-    { name: "Isa (Иса)", meaning: "Лёд, пауза, размышление 🧊" },
-    { name: "Jera (Йера)", meaning: "Урожай, результат, цикл 🌾" },
-    { name: "Eihwaz (Эйваз)", meaning: "Защита, выносливость, связь 🌳" },
-    { name: "Perthro (Пертро)", meaning: "Тайна, шанс, судьба 🎲" },
-    { name: "Algiz (Альгиз)", meaning: "Защита, интуиция, высшая сила 🛡" },
-    { name: "Sowilo (Соулу)", meaning: "Солнце, успех, энергия ☀" },
-    { name: "Tiwaz (Тейваз)", meaning: "Победа, справедливость, лидерство ⚔" },
-    { name: "Berkano (Беркана)", meaning: "Рост, рождение, обновление 🌱" },
-    { name: "Ehwaz (Эваз)", meaning: "Движение, прогресс, доверие 🐎" },
-    { name: "Mannaz (Манназ)", meaning: "Человек, сообщество, самосознание 👤" },
-    { name: "Laguz (Лагуз)", meaning: "Вода, эмоции, поток 🌊" },
-    { name: "Inguz (Ингуз)", meaning: "Плодородие, завершение, потенциал 🌟" },
-    { name: "Othala (Отала)", meaning: "Наследие, дом, традиции 🏠" },
-    { name: "Dagaz (Дагаз)", meaning: "День, прорыв, ясность 🌅" }
+    "Сегодня день новых возможностей! Действуй смело.",
+    "Возможны неожиданные перемены — будь готов!",
+    "Хороший день для важных решений. Доверься интуиции.",
+    "День спокойствия и размышлений. Не торопи события.",
+    "Энергичный день! Используй его для активных действий.",
+    "Возможны небольшие препятствия, но ты справишься!",
+    "День удачи и сюрпризов. Будь открыт новому!"
   ]
 };
 
-// Состояние
+// State
 let currentMode = null;
 let flipCount = 0;
 let dailyFlips = 0;
 let lastFlipDate = null;
 let history = [];
 
-// Проверка ежедневного лимита
+// Daily limit check
 function checkDailyLimit() {
   const today = new Date().toDateString();
   if (lastFlipDate !== today) {
     dailyFlips = 0;
     lastFlipDate = today;
   }
-  return dailyFlips < 1; // 1 бесплатное гадание в день
+  return dailyFlips < 1;
 }
 
-// Выбор режима
+// Mode selection
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => {
+    haptic('select');
     currentMode = btn.dataset.mode;
     
-    // Скрытие/показ экранов
     document.getElementById('modesScreen').style.display = 'none';
-    document.getElementById('fortuneScreen').style.display = 'block';
+    document.getElementById('fortuneScreen').style.display = 'flex';
     
-    // Обновление заголовка
     const titles = {
-      yesno: 'Да / Нет',
-      day: 'На день',
+      yesno: 'Монетка судьбы',
+      day: 'Прогноз на день',
       taro: 'Карта дня Таро',
       rune: 'Руна дня'
     };
-    document.getElementById('fortuneTitle').textContent = titles[currentMode];
+    document.getElementById('fortuneTitle').textContent = titles[currentMode] || currentMode;
     
-    // Сброс UI
+    // Reset UI
     document.getElementById('coin').style.display = 'none';
     document.getElementById('card').style.display = 'none';
     document.getElementById('rune').style.display = 'none';
-    document.getElementById('prediction').innerHTML = '<p>Нажми, чтобы узнать свою судьбу!</p>';
-    document.getElementById('actionBtn').textContent = 'Узнать';
+    document.getElementById('prediction').innerHTML = '<p>Нажми, чтобы узнать свою судьбу</p>';
+    document.getElementById('actionBtn').querySelector('span').textContent = 'Узнать';
     
-    // Показать нужный элемент
+    // Reset transformations
+    const coinInner = document.querySelector('.coin-inner');
+    if (coinInner) coinInner.style.transform = 'rotateY(0deg)';
+    
+    const cardInner = document.querySelector('.card-inner');
+    if (cardInner) cardInner.style.transform = 'rotateY(0deg)';
+    
+    // Show appropriate element
     if (currentMode === 'yesno' || currentMode === 'day') {
       document.getElementById('coin').style.display = 'block';
     } else if (currentMode === 'taro') {
@@ -131,129 +181,195 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     } else if (currentMode === 'rune') {
       document.getElementById('rune').style.display = 'block';
     }
+    
+    // Show/hide history
+    if (history.length > 0) {
+      document.getElementById('history').style.display = 'block';
+      updateHistory();
+    }
   });
 });
 
-// Назад
+// Back button
 document.getElementById('backBtn').addEventListener('click', () => {
-  document.getElementById('modesScreen').style.display = 'grid';
+  haptic('select');
+  document.getElementById('modesScreen').style.display = 'flex';
   document.getElementById('fortuneScreen').style.display = 'none';
   currentMode = null;
 });
 
-// Основное действие
-document.getElementById('actionBtn').addEventListener('click', () => {
+// Main action button
+document.getElementById('actionBtn').addEventListener('click', async () => {
   if (!currentMode) return;
   
   if (!checkDailyLimit() && flipCount === 0) {
-    tg.showAlert("Бесплатное гадание уже использовано сегодня! Смотри рекламу или покупай Stars для дополнительных попыток.");
+    if (tg && tg.showAlert) {
+      tg.showAlert("Бесплатное гадание уже использовано сегодня! Смотри рекламу или покупай Stars для дополнительных попыток.");
+    } else {
+      alert("Бесплатное гадание уже использовано сегодня!");
+    }
     return;
   }
   
+  haptic('medium');
   const actionBtn = document.getElementById('actionBtn');
   actionBtn.disabled = true;
   
   if (currentMode === 'yesno' || currentMode === 'day') {
-    // Монета
-    const coin = document.getElementById('coin');
-    const rotation = Math.floor(Math.random() * 360) + 720;
-    coin.style.transform = `rotateY(${rotation}deg)`;
+    // Coin flip
+    const coinInner = document.querySelector('.coin-inner');
+    const rotation = Math.floor(Math.random() * 360) + 1080; // 3+ full rotations
+    coinInner.style.transform = `rotateY(${rotation}deg)`;
     
     setTimeout(() => {
-      const isHeads = rotation % 720 < 360;
+      haptic('medium');
+      const isYes = rotation % 720 < 360;
       let predictionText;
       
       if (currentMode === 'yesno') {
-        const result = isHeads ? 'heads' : 'tails';
+        const result = isYes ? 'yes' : 'no';
         predictionText = predictions.yesno[result][Math.floor(Math.random() * predictions.yesno[result].length)];
-        predictionText = `<strong>${isHeads ? 'Орёл 🪙' : 'Решка 🌙'}</strong><br>${predictionText}`;
+        predictionText = `<strong>${isYes ? 'ДА' : 'НЕТ'}</strong><br>${predictionText}`;
       } else {
         predictionText = predictions.day[Math.floor(Math.random() * predictions.day.length)];
       }
       
-      document.getElementById('prediction').innerHTML = predictionText;
-      addToHistory(currentMode === 'yesno' ? (isHeads ? 'Орёл' : 'Решка') : 'День', predictionText);
+      document.getElementById('prediction').innerHTML = `<p>${predictionText}</p>`;
+      addToHistory(currentMode === 'yesno' ? (isYes ? 'Да' : 'Нет') : 'День', predictionText);
       
       flipCount++;
       dailyFlips++;
       actionBtn.disabled = false;
-      actionBtn.textContent = "Узнать ещё раз";
+      actionBtn.querySelector('span').textContent = "Узнать ещё раз";
       
-      // Шеринг
+      // Share prompt
       setTimeout(() => {
-        tg.showConfirm("Поделиться результатом?", () => {
-          tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(`Моё предсказание: ${predictionText} 🔮`)}`);
-        });
+        if (tg && tg.showConfirm) {
+          try {
+            tg.showConfirm("Поделиться результатом?", (confirmed) => {
+              if (confirmed && tg.shareUrl) {
+                tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(`Моё предсказание: ${predictionText}`)}`);
+              }
+            });
+          } catch (e) {
+            console.log('Share not available');
+          }
+        }
       }, 1000);
-    }, 1000);
+    }, 1200);
     
   } else if (currentMode === 'taro') {
-    // Таро
-    const card = document.getElementById('card');
-    card.style.transform = 'rotateY(180deg)';
+    // Tarot card
+    const cardInner = document.querySelector('.card-inner');
+    cardInner.style.transform = 'rotateY(180deg)';
     
     setTimeout(() => {
-      const cardData = predictions.taro[Math.floor(Math.random() * predictions.taro.length)];
-      document.getElementById('prediction').innerHTML = `<strong>${cardData.name}</strong><br>${cardData.meaning}`;
-      addToHistory('Таро', `${cardData.name}: ${cardData.meaning}`);
+      haptic('medium');
+      const cardData = tarotData[Math.floor(Math.random() * tarotData.length)];
+      document.getElementById('prediction').innerHTML = `<p><strong>${cardData.nameRu}</strong><br>${cardData.shortMeaning}</p>`;
+      
+      // Update card display
+      const cardNumber = document.getElementById('tarotCardNumber');
+      const cardName = document.getElementById('tarotCardName');
+      if (cardNumber) cardNumber.textContent = cardData.number || '';
+      if (cardName) cardName.textContent = cardData.nameRu;
+      
+      addToHistory('Таро', `${cardData.nameRu}: ${cardData.shortMeaning}`);
       
       flipCount++;
       dailyFlips++;
       actionBtn.disabled = false;
-      actionBtn.textContent = "Вытянуть ещё карту";
-      card.style.transform = 'rotateY(0deg)';
+      actionBtn.querySelector('span').textContent = "Вытянуть ещё карту";
       
       setTimeout(() => {
-        tg.showConfirm("Поделиться результатом?", () => {
-          tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(`Моя карта Таро: ${cardData.name} — ${cardData.meaning} 🎴`)}`);
-        });
+        cardInner.style.transform = 'rotateY(0deg)';
+      }, 3000);
+      
+      // Share prompt
+      setTimeout(() => {
+        if (tg && tg.showConfirm) {
+          try {
+            tg.showConfirm("Поделиться результатом?", (confirmed) => {
+              if (confirmed && tg.shareUrl) {
+                tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(`Моя карта Таро: ${cardData.nameRu} — ${cardData.shortMeaning}`)}`);
+              }
+            });
+          } catch (e) {
+            console.log('Share not available');
+          }
+        }
       }, 1000);
     }, 800);
     
   } else if (currentMode === 'rune') {
-    // Руна
-    const runeData = predictions.rune[Math.floor(Math.random() * predictions.rune.length)];
-    document.querySelector('.rune-stone').textContent = runeData.name.split(' ')[0];
+    // Rune
+    const runeData = runesData[Math.floor(Math.random() * runesData.length)];
+    const runeSymbol = document.getElementById('runeSymbol');
+    if (runeSymbol) {
+      runeSymbol.textContent = runeData.symbol;
+    }
     
     setTimeout(() => {
-      document.getElementById('prediction').innerHTML = `<strong>${runeData.name}</strong><br>${runeData.meaning}`;
-      addToHistory('Руна', `${runeData.name}: ${runeData.meaning}`);
+      haptic('medium');
+      document.getElementById('prediction').innerHTML = `<p><strong>${runeData.nameRu}</strong><br>${runeData.shortMeaning}</p>`;
+      addToHistory('Руна', `${runeData.nameRu}: ${runeData.shortMeaning}`);
       
       flipCount++;
       dailyFlips++;
       actionBtn.disabled = false;
-      actionBtn.textContent = "Выбрать ещё руну";
+      actionBtn.querySelector('span').textContent = "Выбрать ещё руну";
       
+      // Share prompt
       setTimeout(() => {
-        tg.showConfirm("Поделиться результатом?", () => {
-          tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(`Моя руна: ${runeData.name} — ${runeData.meaning} ᚠ`)}`);
-        });
+        if (tg && tg.showConfirm) {
+          try {
+            tg.showConfirm("Поделиться результатом?", (confirmed) => {
+              if (confirmed && tg.shareUrl) {
+                tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(`Моя руна: ${runeData.nameRu} — ${runeData.shortMeaning}`)}`);
+              }
+            });
+          } catch (e) {
+            console.log('Share not available');
+          }
+        }
       }, 1000);
     }, 500);
   }
 });
 
-// История
+// History management
 function addToHistory(type, text) {
   history.unshift({ type, text, date: new Date().toLocaleTimeString() });
   if (history.length > 5) history.pop();
   updateHistory();
+  document.getElementById('history').style.display = 'block';
 }
 
 function updateHistory() {
   const historyList = document.getElementById('historyList');
   historyList.innerHTML = history.map(item => 
-    `<li><strong>${item.type}</strong> — ${item.text} <small>(${item.date})</small></li>`
+    `<li><strong>${item.type}</strong> — ${item.text.replace(/<[^>]*>/g, '')} <small>(${item.date})</small></li>`
   ).join('');
 }
 
-// Монетизация
-document.getElementById('watchAdBtn').addEventListener('click', () => {
-  tg.showAlert("Реклама загружается... (функция в разработке) 📺");
-  // Здесь будет интеграция с Telegram Ads
+// Monetization buttons
+document.getElementById('watchAdBtn')?.addEventListener('click', () => {
+  haptic('select');
+  if (tg && tg.showAlert) {
+    tg.showAlert("Реклама загружается... (функция в разработке)");
+  } else {
+    alert("Реклама загружается...");
+  }
 });
 
-document.getElementById('buyStarsBtn').addEventListener('click', () => {
-  tg.showAlert("Покупка Stars... (функция в разработке) ⭐");
-  // Здесь будет интеграция с Telegram Stars
+document.getElementById('buyStarsBtn')?.addEventListener('click', () => {
+  haptic('select');
+  if (tg && tg.showAlert) {
+    tg.showAlert("Покупка Stars... (функция в разработке)");
+  } else {
+    alert("Покупка Stars...");
+  }
 });
+
+// Initialize
+loadData();

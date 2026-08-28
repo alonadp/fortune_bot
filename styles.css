@@ -1,13 +1,25 @@
 :root {
-  --tg-theme-bg-color: #18222d;
-  --tg-theme-secondary-bg-color: #131a22;
-  --tg-theme-text-color: #ffffff;
-  --tg-theme-hint-color: #7d8b99;
-  --tg-theme-link-color: #5ac8fa;
-  --tg-theme-button-color: #5ac8fa;
-  --tg-theme-button-text-color: #ffffff;
-  --tg-theme-section-bg-color: #1f2933;
-  --tg-theme-section-separator-color: #0f1419;
+  /* Modern Mystical Color Scheme */
+  --bg-primary: #0B0D12;
+  --bg-secondary: #131519;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.08);
+  
+  /* Text */
+  --text-primary: #F5F5F7;
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-accent: #B8A1E8;
+  
+  /* Accents */
+  --violet-glow: rgba(138, 103, 204, 0.15);
+  --lavender: #B8A1E8;
+  --silver: #C5CAD1;
+  
+  /* Metallic Coin Colors */
+  --metal-light: #E8EAED;
+  --metal-mid: #B8BDC4;
+  --metal-dark: #7A7F87;
+  --metal-shadow: rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -17,114 +29,357 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: var(--tg-theme-bg-color);
-  color: var(--tg-theme-text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
   padding: 0;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, var(--violet-glow) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .container {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
   margin: 0 auto;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
+/* Header */
 header {
   text-align: center;
-  padding: 24px 16px 20px;
-  background: var(--tg-theme-secondary-bg-color);
-  border-bottom: 0.5px solid var(--tg-theme-section-separator-color);
+  padding: 32px 20px 28px;
+  background: transparent;
+}
+
+.mystical-symbol {
+  color: var(--lavender);
+  margin: 0 auto 16px;
+  opacity: 0;
+  animation: fadeInDown 0.6s ease-out forwards;
 }
 
 header h1 {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--tg-theme-text-color);
-  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  opacity: 0;
+  animation: fadeInDown 0.6s ease-out 0.1s forwards;
 }
 
-header p {
-  font-size: 15px;
-  color: var(--tg-theme-hint-color);
+.subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
   font-weight: 400;
+  opacity: 0;
+  animation: fadeInDown 0.6s ease-out 0.2s forwards;
 }
 
-/* Выбор режима */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Main Content */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Modes Screen */
 .modes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 16px;
-  background: var(--tg-theme-bg-color);
+  padding: 0 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .mode-btn {
-  background: var(--tg-theme-section-bg-color);
-  border: none;
-  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease,
+              box-shadow 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(184, 161, 232, 0.1), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mode-btn:hover::before {
+  opacity: 1;
+}
+
+.mode-btn:active {
+  transform: scale(0.98);
+}
+
+/* Hero Card */
+.hero-card {
+  padding: 28px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 140px;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out 0.3s forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.coin-preview {
+  flex-shrink: 0;
+}
+
+.coin-mini {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.coin-face {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--metal-light), var(--metal-mid));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 12px var(--metal-shadow),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--metal-dark);
+  position: relative;
+}
+
+.coin-face::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.coin-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--metal-dark);
+  letter-spacing: 1px;
+}
+
+.card-content h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.card-content p {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+/* Grid Cards */
+.grid-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out 0.4s forwards;
+}
+
+.card-item {
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.mode-btn:active {
-  transform: scale(0.96);
-  opacity: 0.8;
-}
-
-.mode-btn .icon {
-  font-size: 40px;
-  line-height: 1;
-}
-
-.mode-btn span:last-child {
-  font-size: 14px;
+  gap: 12px;
   text-align: center;
-  color: var(--tg-theme-text-color);
-  font-weight: 500;
+  min-height: 160px;
 }
 
-/* Экран гадания */
+.tarot-preview,
+.rune-preview {
+  margin-bottom: 8px;
+}
+
+.tarot-card-mini {
+  width: 60px;
+  height: 100px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1a1d28, #252836);
+  border: 1px solid var(--lavender);
+  box-shadow: 0 4px 12px rgba(138, 103, 204, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.tarot-card-back {
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(45deg, transparent 48%, var(--lavender) 49%, var(--lavender) 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, var(--lavender) 49%, var(--lavender) 51%, transparent 52%);
+  background-size: 16px 16px;
+  opacity: 0.3;
+}
+
+.rune-symbol {
+  color: var(--silver);
+  filter: drop-shadow(0 2px 8px rgba(197, 202, 209, 0.3));
+}
+
+.card-item h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.card-item p {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Wide Card */
+.wide-card {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-out 0.5s forwards;
+}
+
+.celestial-icon {
+  flex-shrink: 0;
+  color: var(--lavender);
+  filter: drop-shadow(0 2px 8px rgba(184, 161, 232, 0.4));
+}
+
+.wide-card .card-content {
+  flex: 1;
+}
+
+.wide-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.wide-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Fortune Screen */
 .fortune {
-  background: var(--tg-theme-bg-color);
-  min-height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 32px;
 }
 
 .btn-back {
   background: transparent;
   border: none;
-  color: var(--tg-theme-link-color);
+  color: var(--lavender);
   font-size: 16px;
   cursor: pointer;
-  padding: 16px;
-  margin: 0;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
+  gap: 8px;
   font-weight: 500;
+  transition: opacity 0.2s ease;
 }
 
 .btn-back:active {
   opacity: 0.6;
 }
 
+.btn-back svg {
+  flex-shrink: 0;
+}
+
 .fortune h2 {
   text-align: center;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
-  margin: 0 0 24px;
-  padding: 0 16px 16px;
-  color: var(--tg-theme-text-color);
-  border-bottom: 0.5px solid var(--tg-theme-section-separator-color);
+  margin: 0 0 32px;
+  padding: 0 20px 20px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--card-border);
 }
 
 .fortune-display {
@@ -132,121 +387,265 @@ header p {
   justify-content: center;
   align-items: center;
   margin: 40px 0;
-  min-height: 140px;
-  padding: 0 16px;
+  min-height: 180px;
+  padding: 0 20px;
 }
 
-/* Монета */
+/* Premium 3D Metallic Coin */
 .coin {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
+  perspective: 1000px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.coin:active {
+  transform: scale(0.95);
+}
+
+.coin-inner {
+  width: 100%;
+  height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.coin .side {
+.coin-side {
+  position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  position: absolute;
   backface-visibility: hidden;
+  background: linear-gradient(145deg, var(--metal-light) 0%, var(--metal-mid) 50%, var(--metal-dark) 100%);
+  box-shadow: 
+    0 8px 32px var(--metal-shadow),
+    inset 0 4px 8px rgba(255, 255, 255, 0.3),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.3);
+  border: 3px solid var(--metal-dark);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 70px;
-  background: var(--tg-theme-section-bg-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 }
 
-.coin .heads {
-  background: linear-gradient(145deg, #5ac8fa, #4a9fd8);
+.coin-side::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(0, 0, 0, 0.2), transparent 50%);
 }
 
-.coin .tails {
-  background: linear-gradient(145deg, #8e8e93, #636366);
+.coin-ring {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(122, 127, 135, 0.4);
+}
+
+.coin-ring::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.coin-center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coin-label {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--metal-dark);
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 -1px 2px rgba(255, 255, 255, 0.5);
+  letter-spacing: 2px;
+}
+
+.coin-heads {
+  transform: rotateY(0deg);
+}
+
+.coin-tails {
   transform: rotateY(180deg);
 }
 
-/* Карта Таро */
+/* Tarot Card */
 .card {
-  width: 110px;
-  height: 180px;
+  width: 140px;
+  height: 240px;
   perspective: 1000px;
 }
 
 .card-inner {
   width: 100%;
   height: 100%;
-  background: var(--tg-theme-section-bg-color);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-back,
+.card-front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   border-radius: 12px;
+  backface-visibility: hidden;
+  border: 2px solid var(--lavender);
+  overflow: hidden;
+}
+
+.card-back {
+  background: linear-gradient(135deg, #1a1d28, #252836);
+  box-shadow: 0 8px 24px rgba(138, 103, 204, 0.3);
+}
+
+.card-pattern {
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(45deg, transparent 48%, var(--lavender) 49%, var(--lavender) 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, var(--lavender) 49%, var(--lavender) 51%, transparent 52%);
+  background-size: 20px 20px;
+  opacity: 0.2;
+}
+
+.card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #252836, #1a1d28);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-image {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 70px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-style: preserve-3d;
-  border: 1px solid rgba(90, 200, 250, 0.2);
+  font-size: 80px;
+  background: var(--card-bg);
 }
 
-/* Руна */
+.card-info {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.card-number {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.card-name {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Rune Stone */
 .rune {
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
 }
 
 .rune-stone {
   width: 100%;
   height: 100%;
-  background: var(--tg-theme-section-bg-color);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #3a3f4a, #252933);
+  border-radius: 20px;
+  border: 2px solid var(--silver);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 70px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(125, 139, 153, 0.2);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
+.rune-stone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent 60%);
+}
+
+.rune-symbol-large {
+  position: relative;
+  z-index: 1;
+  color: var(--silver);
+  filter: drop-shadow(0 2px 8px rgba(197, 202, 209, 0.5));
+}
+
+/* Prediction */
 .prediction {
-  background: var(--tg-theme-section-bg-color);
-  border-radius: 12px;
-  padding: 20px;
-  margin: 24px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px;
+  margin: 32px 16px 24px;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .prediction p {
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.6;
-  color: var(--tg-theme-text-color);
+  color: var(--text-primary);
 }
 
 .prediction strong {
-  color: var(--tg-theme-link-color);
+  color: var(--lavender);
   font-weight: 600;
 }
 
+/* Primary Button */
 .btn-primary {
   width: calc(100% - 32px);
-  margin: 0 16px 20px;
-  padding: 14px;
-  background: var(--tg-theme-button-color);
+  margin: 0 16px 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--lavender), #9b84d6);
   border: none;
-  border-radius: 10px;
-  color: var(--tg-theme-button-text-color);
-  font-size: 17px;
+  border-radius: 16px;
+  color: #fff;
+  font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-  box-shadow: 0 2px 8px rgba(90, 200, 250, 0.3);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease,
+              opacity 0.2s ease;
+  box-shadow: 0 4px 16px rgba(184, 161, 232, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-primary:active {
   transform: scale(0.97);
-  opacity: 0.9;
 }
 
 .btn-primary:disabled {
@@ -254,21 +653,24 @@ header p {
   cursor: not-allowed;
 }
 
+/* History */
 .history {
-  background: var(--tg-theme-section-bg-color);
-  border-radius: 12px;
-  padding: 16px;
-  margin: 20px 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 0 16px 24px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .history h3 {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--tg-theme-hint-color);
+  margin-bottom: 16px;
+  color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .history ul {
@@ -277,10 +679,10 @@ header p {
 
 .history li {
   padding: 12px 0;
-  border-bottom: 0.5px solid var(--tg-theme-section-separator-color);
+  border-bottom: 1px solid var(--card-border);
   font-size: 14px;
   line-height: 1.5;
-  color: var(--tg-theme-text-color);
+  color: var(--text-primary);
 }
 
 .history li:last-child {
@@ -288,35 +690,40 @@ header p {
 }
 
 .history li strong {
-  color: var(--tg-theme-link-color);
+  color: var(--lavender);
   font-weight: 600;
 }
 
 .history li small {
-  color: var(--tg-theme-hint-color);
+  color: var(--text-secondary);
   font-size: 12px;
 }
 
+/* Monetization */
 .monetization {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 20px 16px;
-  padding-bottom: 20px;
+  gap: 12px;
+  margin: 0 16px 24px;
 }
 
 .btn-secondary {
   width: 100%;
-  padding: 14px;
-  background: var(--tg-theme-section-bg-color);
-  border: none;
-  border-radius: 10px;
-  color: var(--tg-theme-text-color);
+  padding: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  color: var(--text-primary);
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-secondary:active {
@@ -324,12 +731,33 @@ header p {
   opacity: 0.8;
 }
 
+.btn-secondary svg {
+  flex-shrink: 0;
+}
+
+/* Footer */
 footer {
   text-align: center;
-  margin-top: 20px;
-  padding: 20px 16px 32px;
-  border-top: 0.5px solid var(--tg-theme-section-separator-color);
-  color: var(--tg-theme-hint-color);
+  padding: 24px 20px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  color: var(--text-secondary);
   font-size: 13px;
-  background: var(--tg-theme-secondary-bg-color);
+  border-top: 1px solid var(--card-border);
+  margin-top: auto;
+}
+
+/* Responsive */
+@media (max-width: 360px) {
+  header h1 {
+    font-size: 28px;
+  }
+  
+  .coin {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .coin-label {
+    font-size: 32px;
+  }
 }
