@@ -132,6 +132,32 @@ let dailyFlips = 0;
 let lastFlipDate = null;
 let history = [];
 
+// Daily results cache
+function getTodayKey(prefix) {
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  return `${prefix}_daily_${dateStr}`;
+}
+
+function getDailyResult(type) {
+  try {
+    const key = getTodayKey(type);
+    const cached = localStorage.getItem(key);
+    return cached ? JSON.parse(cached) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function setDailyResult(type, data) {
+  try {
+    const key = getTodayKey(type);
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    // Fail silently
+  }
+}
+
 // Daily limit check
 function checkDailyLimit() {
   const today = new Date().toDateString();
@@ -263,11 +289,17 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     }, 1200);
     
   } else if (currentMode === 'day') {
-    // Daily prediction - NO COIN, just text
+    // Daily prediction - check cache
+    let predictionText = getDailyResult('day_prediction');
+    
+    if (!predictionText) {
+      // Generate new prediction for today
+      predictionText = predictions.day[Math.floor(Math.random() * predictions.day.length)];
+      setDailyResult('day_prediction', predictionText);
+    }
+    
     setTimeout(() => {
       haptic('medium');
-      
-      const predictionText = predictions.day[Math.floor(Math.random() * predictions.day.length)];
       
       document.getElementById('prediction').innerHTML = `<p>${predictionText}</p>`;
       addToHistory('День', predictionText);
@@ -275,7 +307,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       flipCount++;
       dailyFlips++;
       actionBtn.disabled = false;
-      actionBtn.querySelector('span').textContent = "Узнать ещё раз";
+      actionBtn.querySelector('span').textContent = "Посмотреть снова";
       
       // Share prompt
       setTimeout(() => {
@@ -294,13 +326,20 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     }, 500);
     
   } else if (currentMode === 'taro') {
-    // Tarot card
+    // Tarot card - check daily cache
+    let cardData = getDailyResult('tarot');
+    
+    if (!cardData) {
+      // Generate new card for today
+      cardData = tarotData[Math.floor(Math.random() * tarotData.length)];
+      setDailyResult('tarot', cardData);
+    }
+    
     const cardInner = document.querySelector('.card-inner');
     cardInner.style.transform = 'rotateY(180deg)';
     
     setTimeout(() => {
       haptic('medium');
-      const cardData = tarotData[Math.floor(Math.random() * tarotData.length)];
       document.getElementById('prediction').innerHTML = `<p><strong>${cardData.nameRu}</strong><br>${cardData.shortMeaning}</p>`;
       
       // Update card display
@@ -314,7 +353,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       flipCount++;
       dailyFlips++;
       actionBtn.disabled = false;
-      actionBtn.querySelector('span').textContent = "Вытянуть ещё карту";
+      actionBtn.querySelector('span').textContent = "Посмотреть снова";
       
       setTimeout(() => {
         cardInner.style.transform = 'rotateY(0deg)';
@@ -337,8 +376,15 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     }, 800);
     
   } else if (currentMode === 'rune') {
-    // Rune
-    const runeData = runesData[Math.floor(Math.random() * runesData.length)];
+    // Rune - check daily cache
+    let runeData = getDailyResult('rune');
+    
+    if (!runeData) {
+      // Generate new rune for today
+      runeData = runesData[Math.floor(Math.random() * runesData.length)];
+      setDailyResult('rune', runeData);
+    }
+    
     const runeSymbol = document.getElementById('runeSymbol');
     if (runeSymbol) {
       runeSymbol.textContent = runeData.symbol;
@@ -352,7 +398,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       flipCount++;
       dailyFlips++;
       actionBtn.disabled = false;
-      actionBtn.querySelector('span').textContent = "Выбрать ещё руну";
+      actionBtn.querySelector('span').textContent = "Посмотреть снова";
       
       // Share prompt
       setTimeout(() => {
