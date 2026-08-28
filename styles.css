@@ -650,17 +650,19 @@ main {
   width: 140px;
   height: 240px;
   perspective: 1000px;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  flex-shrink: 0;
+  will-change: transform;
 }
 
 .card-inner {
   width: 100%;
   height: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateZ(0);
+  will-change: transform;
 }
 
 .card-back,
@@ -668,11 +670,14 @@ main {
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 0;
+  left: 0;
   border-radius: 12px;
   backface-visibility: hidden;
   border: 2px solid var(--lavender);
   overflow: hidden;
   box-shadow: 0 8px 28px rgba(138, 103, 204, 0.32);
+  -webkit-backface-visibility: hidden;
 }
 
 .card-back {
