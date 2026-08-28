@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Гадание — Adminka Hub</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="styles.css">
@@ -10,64 +10,152 @@
 <body>
   <div class="container">
     <header>
-      <h1>🔮 Гадание</h1>
-      <p>Выбери тип гадания</p>
+      <svg class="mystical-symbol" width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+        <path d="M24 8 L26 22 L40 24 L26 26 L24 40 L22 26 L8 24 L22 22 Z" fill="currentColor" opacity="0.5"/>
+        <circle cx="24" cy="24" r="3" fill="currentColor"/>
+      </svg>
+      <h1>Гадание</h1>
+      <p class="subtitle">Что хочешь узнать сегодня?</p>
     </header>
 
     <main>
       <!-- Выбор типа гадания -->
       <div class="modes" id="modesScreen">
-        <button class="mode-btn" data-mode="yesno">
-          <span class="icon">🪙</span>
-          <span>Да / Нет</span>
+        <!-- Hero Card: Монетка -->
+        <button class="hero-card mode-btn" data-mode="yesno">
+          <div class="coin-preview">
+            <div class="coin-mini">
+              <div class="coin-face">
+                <span class="coin-text">ДА</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>Монетка судьбы</h3>
+            <p>Задай вопрос и узнай: Да или Нет</p>
+          </div>
         </button>
-        <button class="mode-btn" data-mode="day">
-          <span class="icon">📅</span>
-          <span>На день</span>
-        </button>
-        <button class="mode-btn" data-mode="taro">
-          <span class="icon">🎴</span>
-          <span>Карта дня Таро</span>
-        </button>
-        <button class="mode-btn" data-mode="rune">
-          <span class="icon">ᚠ</span>
-          <span>Руна дня</span>
+
+        <!-- Grid Cards -->
+        <div class="grid-cards">
+          <button class="card-item mode-btn" data-mode="taro">
+            <div class="tarot-preview">
+              <div class="tarot-card-mini">
+                <div class="tarot-card-back"></div>
+              </div>
+            </div>
+            <h3>Карта дня</h3>
+            <p>Таро</p>
+          </button>
+
+          <button class="card-item mode-btn" data-mode="rune">
+            <div class="rune-preview">
+              <svg class="rune-symbol" width="48" height="48" viewBox="0 0 48 48">
+                <text x="24" y="36" text-anchor="middle" font-size="32" fill="currentColor">ᚠ</text>
+              </svg>
+            </div>
+            <h3>Руна дня</h3>
+            <p>Elder Futhark</p>
+          </button>
+        </div>
+
+        <!-- Wide Card: Прогноз -->
+        <button class="wide-card mode-btn" data-mode="day">
+          <svg class="celestial-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path d="M16 2 L18 14 L30 16 L18 18 L16 30 L14 18 L2 16 L14 14 Z" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="16" cy="16" r="3" fill="currentColor"/>
+          </svg>
+          <div class="card-content">
+            <h3>Прогноз на день</h3>
+            <p>Главная энергия и подсказка на сегодня</p>
+          </div>
         </button>
       </div>
 
       <!-- Экран гадания -->
       <div class="fortune" id="fortuneScreen" style="display: none;">
-        <button class="btn-back" id="backBtn">← Назад</button>
+        <button class="btn-back" id="backBtn">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M12 4 L6 10 L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Назад
+        </button>
         
         <h2 id="fortuneTitle">Да / Нет</h2>
         
         <div class="fortune-display">
+          <!-- 3D Premium Coin -->
           <div class="coin" id="coin">
-            <div class="side heads">🪙</div>
-            <div class="side tails">🌙</div>
+            <div class="coin-inner">
+              <div class="coin-side coin-heads">
+                <div class="coin-ring"></div>
+                <div class="coin-center">
+                  <span class="coin-label">ДА</span>
+                </div>
+              </div>
+              <div class="coin-side coin-tails">
+                <div class="coin-ring"></div>
+                <div class="coin-center">
+                  <span class="coin-label">НЕТ</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Tarot Card -->
           <div class="card" id="card" style="display: none;">
-            <div class="card-inner">🎴</div>
+            <div class="card-inner">
+              <div class="card-back">
+                <div class="card-pattern"></div>
+              </div>
+              <div class="card-front">
+                <div class="card-image" id="tarotCardImage"></div>
+                <div class="card-info">
+                  <span class="card-number" id="tarotCardNumber"></span>
+                  <span class="card-name" id="tarotCardName"></span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Rune Stone -->
           <div class="rune" id="rune" style="display: none;">
-            <div class="rune-stone">ᚠ</div>
+            <div class="rune-stone">
+              <svg class="rune-symbol-large" width="120" height="120" viewBox="0 0 120 120">
+                <text x="60" y="80" text-anchor="middle" font-size="64" id="runeSymbol">ᚠ</text>
+              </svg>
+            </div>
           </div>
         </div>
 
         <div class="prediction" id="prediction">
-          <p>Нажми, чтобы узнать свою судьбу!</p>
+          <p>Нажми, чтобы узнать свою судьбу</p>
         </div>
 
-        <button class="btn-primary" id="actionBtn">Узнать</button>
+        <button class="btn-primary" id="actionBtn">
+          <span>Узнать</span>
+        </button>
 
-        <div class="history" id="history">
+        <div class="history" id="history" style="display: none;">
           <h3>История</h3>
           <ul id="historyList"></ul>
         </div>
 
-        <div class="monetization">
-          <button class="btn-secondary" id="watchAdBtn">📺 Реклама (+1)</button>
-          <button class="btn-secondary" id="buyStarsBtn">⭐ Купить Stars</button>
+        <div class="monetization" style="display: none;">
+          <button class="btn-secondary" id="watchAdBtn">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 8 L13 10.5 L8 13 Z" fill="currentColor"/>
+            </svg>
+            Реклама (+1)
+          </button>
+          <button class="btn-secondary" id="buyStarsBtn">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 2 L11.5 7 L17 8.5 L11.5 10 L10 15 L8.5 10 L3 8.5 L8.5 7 Z" fill="currentColor"/>
+            </svg>
+            Купить Stars
+          </button>
         </div>
       </div>
     </main>
