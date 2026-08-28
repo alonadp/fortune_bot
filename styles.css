@@ -528,6 +528,25 @@ main {
   padding: 0 20px;
 }
 
+/* Question Mark for Daily Forecast */
+.question-mark {
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 96px;
+  font-weight: 300;
+  color: var(--lavender);
+  opacity: 0.7;
+  animation: gentlePulse 3s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.96); }
+}
+
 /* Premium 3D Metallic Coin - Full Size */
 .coin {
   width: 160px;
@@ -631,6 +650,8 @@ main {
   width: 140px;
   height: 240px;
   perspective: 1000px;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .card-inner {
@@ -639,6 +660,7 @@ main {
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
 }
 
 .card-back,
