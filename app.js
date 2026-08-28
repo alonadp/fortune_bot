@@ -174,8 +174,11 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     if (cardInner) cardInner.style.transform = 'rotateY(0deg)';
     
     // Show appropriate element
-    if (currentMode === 'yesno' || currentMode === 'day') {
+    if (currentMode === 'yesno') {
       document.getElementById('coin').style.display = 'block';
+    } else if (currentMode === 'day') {
+      // Для "на день" не показываем монету, только текст
+      document.getElementById('coin').style.display = 'none';
     } else if (currentMode === 'taro') {
       document.getElementById('card').style.display = 'block';
     } else if (currentMode === 'rune') {
@@ -215,27 +218,28 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
   const actionBtn = document.getElementById('actionBtn');
   actionBtn.disabled = true;
   
-  if (currentMode === 'yesno' || currentMode === 'day') {
-    // Coin flip
+  if (currentMode === 'yesno') {
+    // Coin flip - YES/NO only
     const coinInner = document.querySelector('.coin-inner');
-    const rotation = Math.floor(Math.random() * 360) + 1080; // 3+ full rotations
-    coinInner.style.transform = `rotateY(${rotation}deg)`;
+    
+    // Determine result FIRST
+    const isYes = Math.random() < 0.5;
+    
+    // Calculate rotation: 3-5 full spins + exact final position
+    const spins = (Math.floor(Math.random() * 3) + 3) * 360; // 1080, 1440, or 1800 degrees
+    const finalRotation = spins + (isYes ? 0 : 180); // Stop exactly at 0° (YES) or 180° (NO)
+    
+    coinInner.style.transform = `rotateY(${finalRotation}deg)`;
     
     setTimeout(() => {
       haptic('medium');
-      const isYes = rotation % 720 < 360;
-      let predictionText;
       
-      if (currentMode === 'yesno') {
-        const result = isYes ? 'yes' : 'no';
-        predictionText = predictions.yesno[result][Math.floor(Math.random() * predictions.yesno[result].length)];
-        predictionText = `<strong>${isYes ? 'ДА' : 'НЕТ'}</strong><br>${predictionText}`;
-      } else {
-        predictionText = predictions.day[Math.floor(Math.random() * predictions.day.length)];
-      }
+      const result = isYes ? 'yes' : 'no';
+      let predictionText = predictions.yesno[result][Math.floor(Math.random() * predictions.yesno[result].length)];
+      predictionText = `<strong>${isYes ? 'ДА' : 'НЕТ'}</strong><br>${predictionText}`;
       
       document.getElementById('prediction').innerHTML = `<p>${predictionText}</p>`;
-      addToHistory(currentMode === 'yesno' ? (isYes ? 'Да' : 'Нет') : 'День', predictionText);
+      addToHistory(isYes ? 'Да' : 'Нет', predictionText);
       
       flipCount++;
       dailyFlips++;
@@ -257,6 +261,37 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
         }
       }, 1000);
     }, 1200);
+    
+  } else if (currentMode === 'day') {
+    // Daily prediction - NO COIN, just text
+    setTimeout(() => {
+      haptic('medium');
+      
+      const predictionText = predictions.day[Math.floor(Math.random() * predictions.day.length)];
+      
+      document.getElementById('prediction').innerHTML = `<p>${predictionText}</p>`;
+      addToHistory('День', predictionText);
+      
+      flipCount++;
+      dailyFlips++;
+      actionBtn.disabled = false;
+      actionBtn.querySelector('span').textContent = "Узнать ещё раз";
+      
+      // Share prompt
+      setTimeout(() => {
+        if (tg && tg.showConfirm) {
+          try {
+            tg.showConfirm("Поделиться результатом?", (confirmed) => {
+              if (confirmed && tg.shareUrl) {
+                tg.shareUrl(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(`Мой прогноз на день: ${predictionText}`)}`);
+              }
+            });
+          } catch (e) {
+            console.log('Share not available');
+          }
+        }
+      }, 500);
+    }, 500);
     
   } else if (currentMode === 'taro') {
     // Tarot card
