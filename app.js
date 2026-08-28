@@ -31,9 +31,26 @@ function haptic(type = 'light') {
 let tarotData = [];
 let runesData = [];
 let diceThoughtsData = null;
+let dailyPersonalityData = null;
 
 // Load data
 async function loadData() {
+  try {
+    const personalityResponse = await fetch('data/daily-personality.json');
+    dailyPersonalityData = await personalityResponse.json();
+  } catch (error) {
+    console.error('Failed to load daily personality:', error);
+    // Minimal fallback so the daily layer keeps working offline
+    dailyPersonalityData = {
+      moods: {
+        calm: [{ id: 'mood_calm_01', text: 'Сегодня хороший день не торопить ответы.' }],
+        mystic: [{ id: 'mood_mystic_01', text: 'Сегодня Вселенная настроена загадочно.' }],
+        playful: [{ id: 'mood_playful_03', text: 'Сегодня Вселенная сама ещё не определилась.' }]
+      },
+      anomalies: { coin: [], tarot: [], rune: [], dice: [], forecast: [] },
+      crossReactions: { aligned: [], mixed: [], reflection: [], action: [] }
+    };
+  }
   try {
     const diceResponse = await fetch('data/dice-thoughts.json');
     diceThoughtsData = await diceResponse.json();
@@ -149,11 +166,15 @@ let dailyFlips = 0;
 let lastFlipDate = null;
 let history = [];
 
+// Local calendar date (used for all daily resets)
+function getLocalDateStr() {
+  const today = new Date();
+  return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+}
+
 // Daily results cache
 function getTodayKey(prefix) {
-  const today = new Date();
-  const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  return `${prefix}_daily_${dateStr}`;
+  return `${prefix}_daily_${getLocalDateStr()}`;
 }
 
 function getDailyResult(type) {
@@ -246,6 +267,170 @@ const DiceThought = {
   }
 };
 
+// === Daily creative layer ===
+// One mood per local calendar day, rare presentation-only "anomalies" after
+// results, and a single once-a-day cross-reaction when 3+ modes were used.
+// Never alters actual fortune results.
+const DailyLayer = {
+  ANOMALY_CHANCE: 0.05,
+  MOOD_WEIGHTS: [
+    { tone: 'calm', weight: 0.45 },
+    { tone: 'mystic', weight: 0.40 },
+    { tone: 'playful', weight: 0.15 }
+  ],
+  STATE_KEY: 'fortune_daily_state',
+  // Presentation tone of a result, for the light cross-reaction only
+  THEME_TONE: { sun: 'positive', energy: 'action', warning: 'caution', moon: 'reflection', calm: 'reflection', mystic: 'neutral' },
+  DICE_TONE: { 1: 'reflection', 2: 'action', 3: 'reflection', 4: 'neutral', 5: 'neutral', 6: 'action' },
+  state: null
+};
+
+function loadDailyState() {
+  const today = getLocalDateStr();
+  try {
+    const raw = localStorage.getItem(DailyLayer.STATE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (saved && saved.date === today) return saved;
+    }
+  } catch (e) {
+    // Fall through to a fresh state
+  }
+  return { date: today, mood: null, completed: {}, tones: {}, crossReactionShown: false };
+}
+
+function saveDailyState() {
+  try {
+    localStorage.setItem(DailyLayer.STATE_KEY, JSON.stringify(DailyLayer.state));
+  } catch (e) {
+    // Fail silently
+  }
+}
+
+function pickRandom(pool) {
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// Picks today's mood once and keeps it for the rest of the local day
+function ensureDailyMood() {
+  const state = DailyLayer.state;
+  const moods = dailyPersonalityData && dailyPersonalityData.moods;
+  if (!moods) return null;
+
+  if (state.mood && state.mood.tone && moods[state.mood.tone]) {
+    const saved = moods[state.mood.tone].find(m => m.id === state.mood.id);
+    if (saved) return saved.text;
+  }
+
+  const roll = Math.random();
+  let acc = 0;
+  let tone = 'calm';
+  for (const entry of DailyLayer.MOOD_WEIGHTS) {
+    acc += entry.weight;
+    if (roll < acc) { tone = entry.tone; break; }
+  }
+  const pool = moods[tone] && moods[tone].length ? moods[tone] : moods.calm;
+  const mood = pickRandom(pool);
+  state.mood = { id: mood.id, tone };
+  saveDailyState();
+  return mood.text;
+}
+
+function renderDailyMood() {
+  const moodText = ensureDailyMood();
+  const el = document.getElementById('dailyMood');
+  if (!el || !moodText) return;
+  document.getElementById('dailyMoodText').textContent = moodText;
+  el.style.display = 'flex';
+}
+
+// Tiny muted dot on main screen cards already opened today
+const MODE_TO_STATE_KEY = { yesno: 'coin', taro: 'tarot', rune: 'rune', dice: 'dice', day: 'forecast' };
+
+function updateDoneDots() {
+  if (!DailyLayer.state) return;
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    const key = MODE_TO_STATE_KEY[btn.dataset.mode];
+    const done = !!DailyLayer.state.completed[key];
+    let dot = btn.querySelector('.done-dot');
+    if (done && !dot) {
+      dot = document.createElement('span');
+      dot.className = 'done-dot';
+      dot.setAttribute('aria-hidden', 'true');
+      btn.appendChild(dot);
+    } else if (!done && dot) {
+      dot.remove();
+    }
+  });
+}
+
+function hideAtmosNote() {
+  const el = document.getElementById('atmosNote');
+  if (el) el.style.display = 'none';
+}
+
+function showAtmosNote(text) {
+  const el = document.getElementById('atmosNote');
+  if (!el || !text) return;
+  document.getElementById('atmosNoteText').textContent = text;
+  el.style.display = 'none';
+  void el.offsetWidth;
+  el.style.display = 'flex';
+}
+
+// Picks the once-a-day cross-reaction type from collected result tones
+function pickCrossReaction() {
+  const reactions = dailyPersonalityData && dailyPersonalityData.crossReactions;
+  if (!reactions) return null;
+
+  const tones = Object.values(DailyLayer.state.tones);
+  const count = tone => tones.filter(t => t === tone).length;
+
+  let type;
+  if (count('action') >= 2) type = 'action';
+  else if (count('reflection') >= 2) type = 'reflection';
+  else if (new Set(tones).size <= 2) type = 'aligned';
+  else type = 'mixed';
+
+  const pool = reactions[type];
+  return pool && pool.length ? pickRandom(pool).text : null;
+}
+
+// Records a completed mode and maybe shows ONE atmospheric note:
+// the once-a-day cross-reaction has priority over a rare anomaly.
+function recordDailyResult(anomalyKey, tone, suppressAnomaly) {
+  const state = DailyLayer.state;
+  if (!state) return;
+  state.completed[anomalyKey] = true;
+  if (tone) state.tones[anomalyKey] = tone;
+  saveDailyState();
+
+  const completedCount = Object.keys(state.completed).filter(k => state.completed[k]).length;
+  if (!state.crossReactionShown && completedCount >= 3) {
+    const reaction = pickCrossReaction();
+    if (reaction) {
+      showAtmosNote(reaction);
+      state.crossReactionShown = true;
+      saveDailyState();
+      return;
+    }
+  }
+
+  if (suppressAnomaly) return;
+  if (Math.random() < DailyLayer.ANOMALY_CHANCE) {
+    const pools = dailyPersonalityData && dailyPersonalityData.anomalies;
+    const pool = pools && pools[anomalyKey];
+    if (pool && pool.length) showAtmosNote(pickRandom(pool).text);
+  }
+}
+
+function initDailyLayer() {
+  DailyLayer.state = loadDailyState();
+  saveDailyState();
+  renderDailyMood();
+  updateDoneDots();
+}
+
 // === Visual atmosphere themes (presentation only) ===
 const SCREEN_THEMES = { yesno: 'screen--coin', taro: 'screen--tarot', rune: 'screen--rune', day: 'screen--daily', dice: 'screen--dice' };
 const RESULT_THEME_CLASSES = ['theme-moon', 'theme-sun', 'theme-warning', 'theme-calm', 'theme-energy', 'theme-mystic'];
@@ -302,6 +487,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     document.getElementById('questionMark').style.display = 'none';
     document.getElementById('diceScene').style.display = 'none';
     document.getElementById('fortuneSubtitle').style.display = 'none';
+    hideAtmosNote();
     document.querySelector('.fortune-display').style.display = 'flex';
     document.getElementById('prediction').style.display = 'block';
     document.getElementById('prediction').classList.remove('prediction--reveal');
@@ -355,6 +541,7 @@ document.getElementById('backBtn').addEventListener('click', () => {
   document.getElementById('modesScreen').style.display = 'flex';
   document.getElementById('fortuneScreen').style.display = 'none';
   currentMode = null;
+  updateDoneDots();
 });
 
 // Main action button
@@ -374,6 +561,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
   haptic(currentMode === 'dice' ? 'light' : 'medium');
   const actionBtn = document.getElementById('actionBtn');
   actionBtn.disabled = true;
+  hideAtmosNote();
   
   if (currentMode === 'dice') {
     // Thought Dice: physical number is always shown; the thought may be absurd
@@ -402,6 +590,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       }
 
       const thought = DiceThought.pickThought(rollResult.value);
+      const isAbsurd = !!(thought && String(thought.id).indexOf('absurd') === 0);
       const prediction = document.getElementById('prediction');
       prediction.innerHTML = `<p class="dice-caption">Твоя мысль</p><p class="dice-thought">${thought ? thought.text : 'Мысль потерялась по дороге. Брось ещё раз.'}</p>`;
       prediction.style.display = 'block';
@@ -417,6 +606,9 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       DiceThought.rolling = false;
       actionBtn.disabled = false;
       actionBtn.querySelector('span').textContent = 'Бросить ещё раз';
+
+      // Absurd thought already carries the humor — skip the anomaly then
+      recordDailyResult('dice', DailyLayer.DICE_TONE[rollResult.value] || 'neutral', isAbsurd);
     }, rollResult.duration + 150);
 
   } else if (currentMode === 'yesno') {
@@ -446,6 +638,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       dailyFlips++;
       actionBtn.disabled = false;
       actionBtn.querySelector('span').textContent = "Узнать ещё раз";
+      recordDailyResult('coin', isYes ? 'positive' : 'caution', false);
       
       // Share prompt
       setTimeout(() => {
@@ -487,6 +680,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       dailyFlips++;
       actionBtn.disabled = false;
       actionBtn.querySelector('span').textContent = "Посмотреть снова";
+      recordDailyResult('forecast', 'neutral', false);
       
       // Share prompt
       setTimeout(() => {
@@ -534,6 +728,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       dailyFlips++;
       actionBtn.disabled = false;
       actionBtn.querySelector('span').textContent = "Посмотреть снова";
+      recordDailyResult('tarot', DailyLayer.THEME_TONE[cardData.theme] || 'neutral', false);
       
       setTimeout(() => {
         cardInner.style.transform = 'rotateY(0deg)';
@@ -580,6 +775,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
       dailyFlips++;
       actionBtn.disabled = false;
       actionBtn.querySelector('span').textContent = "Посмотреть снова";
+      recordDailyResult('rune', DailyLayer.THEME_TONE[runeData.theme] || 'neutral', false);
       
       // Share prompt
       setTimeout(() => {
@@ -634,4 +830,6 @@ document.getElementById('buyStarsBtn')?.addEventListener('click', () => {
 });
 
 // Initialize
-loadData();
+loadData().then(() => {
+  initDailyLayer();
+});

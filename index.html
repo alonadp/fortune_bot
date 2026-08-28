@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Гадание — Adminka Hub</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
   <div class="ambient-background" aria-hidden="true">
@@ -23,6 +23,12 @@
       </svg>
       <h1>Гадание</h1>
       <p class="subtitle">Что хочешь узнать сегодня?</p>
+      <p class="daily-mood" id="dailyMood" style="display: none;">
+        <svg width="12" height="12" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <path d="M24 8 L26 22 L40 24 L26 26 L24 40 L22 26 L8 24 L22 22 Z" fill="currentColor"/>
+        </svg>
+        <span id="dailyMoodText"></span>
+      </p>
     </header>
 
     <main>
@@ -181,6 +187,13 @@
           <p>Нажми, чтобы узнать свою судьбу</p>
         </div>
 
+        <p class="atmos-note" id="atmosNote" style="display: none;">
+          <svg width="12" height="12" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <path d="M24 8 L26 22 L40 24 L26 26 L24 40 L22 26 L8 24 L22 22 Z" fill="currentColor"/>
+          </svg>
+          <span id="atmosNoteText"></span>
+        </p>
+
         <button class="btn-primary" id="actionBtn">
           <span>Узнать</span>
         </button>
@@ -209,6 +222,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

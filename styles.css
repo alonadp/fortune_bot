@@ -577,6 +577,62 @@ main {
   line-height: 1.4;
 }
 
+/* === Daily creative layer === */
+
+/* Small atmospheric status line under the home subtitle */
+.daily-mood {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--lavender);
+  opacity: 0.75;
+  margin: 10px 24px 0;
+}
+
+.daily-mood svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* Rare atmospheric note after a result (anomaly / cross-reaction) */
+.atmos-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--lavender);
+  margin: -6px 28px 16px;
+  animation: atmosIn 300ms ease-out forwards;
+}
+
+.atmos-note svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+@keyframes atmosIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 0.75; transform: translateY(0); }
+}
+
+/* Tiny muted marker on cards already opened today */
+.done-dot {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(184, 161, 232, 0.45);
+  pointer-events: none;
+}
+
 /* === Dice Thought (Кубик мысли) === */
 
 /* Shared pip (dot) style */
