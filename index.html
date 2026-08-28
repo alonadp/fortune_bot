@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Гадание — Adminka Hub</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔮 Гадание</h1>
+      <p>Выбери тип гадания</p>
+    </header>
+
+    <main>
+      <!-- Выбор типа гадания -->
+      <div class="modes" id="modesScreen">
+        <button class="mode-btn" data-mode="yesno">
+          <span class="icon">🪙</span>
+          <span>Да / Нет</span>
+        </button>
+        <button class="mode-btn" data-mode="day">
+          <span class="icon">📅</span>
+          <span>На день</span>
+        </button>
+        <button class="mode-btn" data-mode="taro">
+          <span class="icon">🎴</span>
+          <span>Карта дня Таро</span>
+        </button>
+        <button class="mode-btn" data-mode="rune">
+          <span class="icon">ᚠ</span>
+          <span>Руна дня</span>
+        </button>
+      </div>
+
+      <!-- Экран гадания -->
+      <div class="fortune" id="fortuneScreen" style="display: none;">
+        <button class="btn-back" id="backBtn">← Назад</button>
+        
+        <h2 id="fortuneTitle">Да / Нет</h2>
+        
+        <div class="fortune-display">
+          <div class="coin" id="coin">
+            <div class="side heads">🪙</div>
+            <div class="side tails">🌙</div>
+          </div>
+          <div class="card" id="card" style="display: none;">
+            <div class="card-inner">🎴</div>
+          </div>
+          <div class="rune" id="rune" style="display: none;">
+            <div class="rune-stone">ᚠ</div>
+          </div>
+        </div>
+
+        <div class="prediction" id="prediction">
+          <p>Нажми, чтобы узнать свою судьбу!</p>
+        </div>
+
+        <button class="btn-primary" id="actionBtn">Узнать</button>
+
+        <div class="history" id="history">
+          <h3>История</h3>
+          <ul id="historyList"></ul>
+        </div>
+
+        <div class="monetization">
+          <button class="btn-secondary" id="watchAdBtn">📺 Реклама (+1)</button>
+          <button class="btn-secondary" id="buyStarsBtn">⭐ Купить Stars</button>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Adminka Hub © 2026</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
