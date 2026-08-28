@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Гадание — Adminka Hub</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
   <div class="ambient-background" aria-hidden="true">
@@ -64,6 +64,21 @@
           </button>
         </div>
 
+        <!-- Wide Card: Кубик мысли -->
+        <button class="wide-card mode-btn" data-mode="dice" aria-label="Открыть Кубик мысли">
+          <div class="dice-preview" aria-hidden="true">
+            <div class="dice-mini">
+              <span class="pip"></span>
+              <span class="pip"></span>
+              <span class="pip"></span>
+            </div>
+          </div>
+          <div class="card-content">
+            <h3>Кубик мысли</h3>
+            <p>Брось и узнай, что тебе нужно услышать</p>
+          </div>
+        </button>
+
         <!-- Wide Card: Прогноз -->
         <button class="wide-card mode-btn" data-mode="day" aria-label="Получить прогноз на день">
           <svg class="celestial-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
@@ -87,7 +102,9 @@
         </button>
         
         <h2 id="fortuneTitle">Да / Нет</h2>
-        
+
+        <p class="fortune-subtitle" id="fortuneSubtitle" style="display: none;">Не знаешь, что тебе сейчас нужно услышать?</p>
+
         <div class="fortune-display">
           <!-- 3D Premium Coin -->
           <div class="coin" id="coin">
@@ -134,6 +151,30 @@
 
           <!-- Question Mark for Daily -->
           <div class="question-mark" id="questionMark" style="display: none;" aria-hidden="true">?</div>
+
+          <!-- 3D Thought Dice -->
+          <div class="dice-scene" id="diceScene" style="display: none;" aria-hidden="true">
+            <div class="dice" id="dice">
+              <div class="dice-face dice-face--1">
+                <span class="pip"></span>
+              </div>
+              <div class="dice-face dice-face--2">
+                <span class="pip"></span><span class="pip"></span>
+              </div>
+              <div class="dice-face dice-face--3">
+                <span class="pip"></span><span class="pip"></span><span class="pip"></span>
+              </div>
+              <div class="dice-face dice-face--4">
+                <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+              </div>
+              <div class="dice-face dice-face--5">
+                <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+              </div>
+              <div class="dice-face dice-face--6">
+                <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="prediction" id="prediction">
@@ -168,6 +209,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

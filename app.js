@@ -30,9 +30,26 @@ function haptic(type = 'light') {
 // Data
 let tarotData = [];
 let runesData = [];
+let diceThoughtsData = null;
 
 // Load data
 async function loadData() {
+  try {
+    const diceResponse = await fetch('data/dice-thoughts.json');
+    diceThoughtsData = await diceResponse.json();
+  } catch (error) {
+    console.error('Failed to load dice thoughts:', error);
+    // Minimal fallback so the dice keeps working offline
+    diceThoughtsData = {
+      "1": [{ id: 'release_01', text: 'Не всё, что закончилось, было ошибкой.' }],
+      "2": [{ id: 'decide_01', text: 'Уверенность часто приходит после первого шага.' }],
+      "3": [{ id: 'reframe_03', text: 'То, что кажется тупиком, иногда просто требует другого маршрута.' }],
+      "4": [{ id: 'people_01', text: 'Обращай внимание не на обещания, а на повторяющиеся поступки.' }],
+      "5": [{ id: 'chance_03', text: 'Неожиданное не обязательно означает плохое.' }],
+      "6": [{ id: 'act_01', text: 'Не жди уверенности. Иногда она появляется только после действия.' }],
+      absurd: [{ id: 'absurd_04', text: 'Иногда Вселенная молчит. Иногда ей просто нечего добавить.' }]
+    };
+  }
   try {
     const [tarotResponse, runesResponse] = await Promise.all([
       fetch('data/tarot.json'),
@@ -158,8 +175,79 @@ function setDailyResult(type, data) {
   }
 }
 
+// === Dice Thought module ===
+// Categories are hidden from the user: 1 release, 2 decide, 3 reframe,
+// 4 people, 5 chance, 6 act. "absurd" replaces the thought (not the number)
+// with configurable probability.
+const DiceThought = {
+  ABSURD_CHANCE: 0.12,
+  // Dice orientation (rotateX/rotateY in deg) that shows each face to the viewer
+  FACE_ROTATIONS: {
+    1: { x: 0,   y: 0 },
+    2: { x: 0,   y: -90 },
+    3: { x: -90, y: 0 },
+    4: { x: 90,  y: 0 },
+    5: { x: 0,   y: 90 },
+    6: { x: 0,   y: 180 }
+  },
+  rotX: -22,
+  rotY: 28,
+  lastThoughtId: null,
+  rolling: false,
+
+  prefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  },
+
+  // Spins the CSS cube and returns { value, duration }
+  roll() {
+    const value = 1 + Math.floor(Math.random() * 6);
+    const target = this.FACE_ROTATIONS[value];
+    const diceEl = document.getElementById('dice');
+    let duration;
+
+    if (this.prefersReducedMotion()) {
+      duration = 250;
+      this.rotX = target.x;
+      this.rotY = target.y;
+    } else {
+      duration = 1000 + Math.floor(Math.random() * 400); // 1000-1400ms
+      // Accumulate 2-3 extra full turns per axis, then land exactly on the face
+      const baseX = this.rotX + 360 * (2 + Math.floor(Math.random() * 2));
+      const baseY = this.rotY + 360 * (2 + Math.floor(Math.random() * 2));
+      this.rotX = baseX + ((((target.x - baseX) % 360) + 360) % 360);
+      this.rotY = baseY + ((((target.y - baseY) % 360) + 360) % 360);
+    }
+
+    if (diceEl) {
+      diceEl.style.transitionDuration = duration + 'ms';
+      diceEl.style.transform = `rotateX(${this.rotX}deg) rotateY(${this.rotY}deg)`;
+    }
+    return { value, duration };
+  },
+
+  // Picks a thought for the rolled value; occasionally an absurd one.
+  // Never repeats the previous thought back-to-back when possible.
+  pickThought(value) {
+    if (!diceThoughtsData) return null;
+    let pool = diceThoughtsData[String(value)] || [];
+    if (Math.random() < this.ABSURD_CHANCE && Array.isArray(diceThoughtsData.absurd) && diceThoughtsData.absurd.length) {
+      pool = diceThoughtsData.absurd;
+    }
+    if (!pool.length) return null;
+
+    let thought = pool[Math.floor(Math.random() * pool.length)];
+    if (pool.length > 1 && thought.id === this.lastThoughtId) {
+      const others = pool.filter(t => t.id !== this.lastThoughtId);
+      thought = others[Math.floor(Math.random() * others.length)];
+    }
+    this.lastThoughtId = thought.id;
+    return thought;
+  }
+};
+
 // === Visual atmosphere themes (presentation only) ===
-const SCREEN_THEMES = { yesno: 'screen--coin', taro: 'screen--tarot', rune: 'screen--rune', day: 'screen--daily' };
+const SCREEN_THEMES = { yesno: 'screen--coin', taro: 'screen--tarot', rune: 'screen--rune', day: 'screen--daily', dice: 'screen--dice' };
 const RESULT_THEME_CLASSES = ['theme-moon', 'theme-sun', 'theme-warning', 'theme-calm', 'theme-energy', 'theme-mystic'];
 
 function setScreenTheme(mode) {
@@ -200,7 +288,8 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
       yesno: 'Монетка судьбы',
       day: 'Прогноз на день',
       taro: 'Карта дня Таро',
-      rune: 'Руна дня'
+      rune: 'Руна дня',
+      dice: 'Кубик мысли'
     };
     document.getElementById('fortuneTitle').textContent = titles[currentMode] || currentMode;
     
@@ -209,8 +298,11 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     document.getElementById('card').style.display = 'none';
     document.getElementById('rune').style.display = 'none';
     document.getElementById('questionMark').style.display = 'none';
+    document.getElementById('diceScene').style.display = 'none';
+    document.getElementById('fortuneSubtitle').style.display = 'none';
     document.querySelector('.fortune-display').style.display = 'flex';
     document.getElementById('prediction').style.display = 'block';
+    document.getElementById('prediction').classList.remove('prediction--reveal');
     document.getElementById('prediction').innerHTML = '<p>Нажми, чтобы узнать свою судьбу</p>';
     document.getElementById('actionBtn').querySelector('span').textContent = 'Узнать';
     
@@ -236,12 +328,20 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     } else if (currentMode === 'rune') {
       document.getElementById('rune').style.display = 'block';
       document.getElementById('questionMark').style.display = 'none';
+    } else if (currentMode === 'dice') {
+      document.getElementById('diceScene').style.display = 'block';
+      document.getElementById('fortuneSubtitle').style.display = 'block';
+      // No result shown before the first throw
+      document.getElementById('prediction').style.display = 'none';
+      document.getElementById('actionBtn').querySelector('span').textContent = 'Бросить кубик';
     }
     
-    // Show/hide history
-    if (history.length > 0) {
+    // Show/hide history (the dice screen stays calm and minimal)
+    if (history.length > 0 && currentMode !== 'dice') {
       document.getElementById('history').style.display = 'block';
       updateHistory();
+    } else {
+      document.getElementById('history').style.display = 'none';
     }
   });
 });
@@ -258,7 +358,8 @@ document.getElementById('backBtn').addEventListener('click', () => {
 document.getElementById('actionBtn').addEventListener('click', async () => {
   if (!currentMode) return;
   
-  if (!checkDailyLimit() && flipCount === 0) {
+  // Dice throws are free and unlimited
+  if (currentMode !== 'dice' && !checkDailyLimit() && flipCount === 0) {
     if (tg && tg.showAlert) {
       tg.showAlert("Бесплатное гадание уже использовано сегодня! Смотри рекламу или покупай Stars для дополнительных попыток.");
     } else {
@@ -267,11 +368,43 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     return;
   }
   
-  haptic('medium');
+  haptic(currentMode === 'dice' ? 'light' : 'medium');
   const actionBtn = document.getElementById('actionBtn');
   actionBtn.disabled = true;
   
-  if (currentMode === 'yesno') {
+  if (currentMode === 'dice') {
+    // Thought Dice: physical number is always shown; the thought may be absurd
+    if (DiceThought.rolling) return;
+    DiceThought.rolling = true;
+
+    const rollResult = DiceThought.roll();
+    const scene = document.getElementById('diceScene');
+
+    if (scene && !DiceThought.prefersReducedMotion()) {
+      scene.classList.remove('dice-scene--rolling');
+      void scene.offsetWidth;
+      scene.style.animationDuration = rollResult.duration + 'ms';
+      scene.classList.add('dice-scene--rolling');
+    }
+
+    setTimeout(() => {
+      haptic('select');
+      if (scene) scene.classList.remove('dice-scene--rolling');
+
+      const thought = DiceThought.pickThought(rollResult.value);
+      const prediction = document.getElementById('prediction');
+      prediction.innerHTML = `<p class="dice-number">${rollResult.value}</p><p class="dice-thought">${thought ? thought.text : 'Мысль потерялась по дороге. Брось ещё раз.'}</p>`;
+      prediction.style.display = 'block';
+      prediction.classList.remove('prediction--reveal');
+      void prediction.offsetWidth;
+      prediction.classList.add('prediction--reveal');
+
+      DiceThought.rolling = false;
+      actionBtn.disabled = false;
+      actionBtn.querySelector('span').textContent = 'Бросить ещё раз';
+    }, rollResult.duration + 80);
+
+  } else if (currentMode === 'yesno') {
     // Coin flip - YES/NO only
     const coinInner = document.querySelector('.coin-inner');
     
