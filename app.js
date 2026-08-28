@@ -158,6 +158,24 @@ function setDailyResult(type, data) {
   }
 }
 
+// === Visual atmosphere themes (presentation only) ===
+const SCREEN_THEMES = { yesno: 'screen--coin', taro: 'screen--tarot', rune: 'screen--rune', day: 'screen--daily' };
+const RESULT_THEME_CLASSES = ['theme-moon', 'theme-sun', 'theme-warning', 'theme-calm', 'theme-energy', 'theme-mystic'];
+
+function setScreenTheme(mode) {
+  const el = document.getElementById('fortuneScreen');
+  if (!el) return;
+  el.classList.remove(...Object.values(SCREEN_THEMES), ...RESULT_THEME_CLASSES);
+  if (SCREEN_THEMES[mode]) el.classList.add(SCREEN_THEMES[mode]);
+}
+
+function setResultTheme(theme) {
+  const el = document.getElementById('fortuneScreen');
+  if (!el || !theme) return;
+  el.classList.remove(...RESULT_THEME_CLASSES);
+  el.classList.add('theme-' + theme);
+}
+
 // Daily limit check
 function checkDailyLimit() {
   const today = new Date().toDateString();
@@ -176,6 +194,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     
     document.getElementById('modesScreen').style.display = 'none';
     document.getElementById('fortuneScreen').style.display = 'flex';
+    setScreenTheme(currentMode);
     
     const titles = {
       yesno: 'Монетка судьбы',
@@ -352,6 +371,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     
     setTimeout(() => {
       haptic('medium');
+      setResultTheme(cardData.theme || 'mystic');
       document.getElementById('prediction').innerHTML = `<p><strong>${cardData.nameRu}</strong><br>${cardData.shortMeaning}</p>`;
       
       // Update card display
@@ -404,6 +424,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     
     setTimeout(() => {
       haptic('medium');
+      setResultTheme(runeData.theme || 'mystic');
       document.getElementById('prediction').innerHTML = `<p><strong>${runeData.nameRu}</strong><br>${runeData.shortMeaning}</p>`;
       addToHistory('Руна', `${runeData.nameRu}: ${runeData.shortMeaning}`);
       

@@ -1,9 +1,30 @@
 :root {
-  /* Modern Mystical Color Scheme */
-  --bg-primary: #090A0F;
+  /* === Gradient System: base === */
+  --bg-base: #08090E;
+  --bg-primary: var(--bg-base);
   --bg-secondary: #0D0E13;
-  --card-bg: rgba(255, 255, 255, 0.055);
-  --card-border: rgba(255, 255, 255, 0.085);
+
+  /* === Gradient System: glow palette (RGB triplets) === */
+  --glow-violet: 126, 87, 194;
+  --glow-indigo: 67, 76, 170;
+  --glow-blue: 55, 91, 170;
+  --glow-lavender: 174, 135, 225;
+  --glow-magenta: 156, 73, 132;
+  --glow-silver: 197, 202, 209;
+  --glow-navy: 40, 52, 110;
+  --glow-amber: 190, 150, 90;
+  --glow-burgundy: 130, 45, 70;
+
+  /* === Gradient System: surfaces === */
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-strong: rgba(255, 255, 255, 0.07);
+  --surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+  --border: rgba(255, 255, 255, 0.09);
+  --border-highlight: rgba(255, 255, 255, 0.14);
+
+  /* Legacy aliases (used across components) */
+  --card-bg: var(--surface);
+  --card-border: var(--border);
   
   /* Text */
   --text-primary: #F5F5F7;
@@ -39,14 +60,10 @@
   }
 }
 
-/* Improved Background with Depth */
+/* Almost-black foundation; ambient light comes from .ambient-background */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', sans-serif;
-  background: 
-    radial-gradient(circle at 50% 8%, rgba(130, 95, 190, 0.11), transparent 30%),
-    radial-gradient(circle at 88% 52%, rgba(90, 65, 140, 0.06), transparent 34%),
-    radial-gradient(circle at 12% 78%, rgba(75, 55, 115, 0.04), transparent 28%),
-    var(--bg-primary);
+  background: var(--bg-base);
   color: var(--text-primary);
   min-height: 100vh;
   min-height: 100dvh;
@@ -58,6 +75,62 @@ body {
   -moz-osx-font-smoothing: grayscale;
   position: relative;
   overflow-x: hidden;
+}
+
+/* === Ambient Background: fixed colored light behind the UI === */
+.ambient-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.ambient-blob--primary {
+  width: 460px;
+  height: 460px;
+  top: -160px;
+  left: -80px;
+  background: radial-gradient(circle, rgba(var(--glow-violet), 0.55), transparent 70%);
+  opacity: 0.32;
+  animation: ambientDrift 16s ease-in-out infinite;
+}
+
+.ambient-blob--secondary {
+  width: 520px;
+  height: 520px;
+  top: 35%;
+  right: -240px;
+  background: radial-gradient(circle, rgba(var(--glow-indigo), 0.5), transparent 70%);
+  opacity: 0.24;
+  animation: ambientDrift 20s ease-in-out infinite reverse;
+}
+
+.ambient-blob--accent {
+  width: 400px;
+  height: 400px;
+  bottom: -180px;
+  left: 15%;
+  background: radial-gradient(circle, rgba(var(--glow-magenta), 0.4), transparent 70%);
+  opacity: 0.18;
+}
+
+@keyframes ambientDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(15px, -12px, 0) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-blob {
+    animation: none !important;
+  }
 }
 
 /* Subtle Decorative Stars */
@@ -167,10 +240,13 @@ main {
   gap: 10px;
 }
 
-/* Base Card Style with Improved Depth */
+/* Glass Card Surface: dark translucent, ambient light shows through */
 .mode-btn {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  --card-glow: var(--glow-lavender);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(var(--card-glow), 0.07), transparent 60%),
+    var(--surface-gradient);
+  border: 1px solid var(--border);
   border-radius: 22px;
   padding: 0;
   cursor: pointer;
@@ -178,41 +254,35 @@ main {
               background 180ms ease,
               border-color 180ms ease,
               box-shadow 180ms ease;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   color: var(--text-primary);
   text-align: left;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
 }
 
+/* Subtle top light reflection — material feel */
 .mode-btn::before {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 22px;
-  padding: 1px;
-  background: linear-gradient(145deg, rgba(184, 161, 232, 0.12), transparent 60%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  border-radius: inherit;
   pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 30%);
 }
 
 .mode-btn:active {
   transform: scale(0.975);
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--border-highlight);
 }
 
-.mode-btn:hover::before {
-  opacity: 1;
-}
+/* Per-card ambient accents */
+.mode-btn[data-mode="yesno"] { --card-glow: var(--glow-silver); }
+.mode-btn[data-mode="taro"]  { --card-glow: var(--glow-magenta); }
+.mode-btn[data-mode="rune"]  { --card-glow: var(--glow-blue); }
+.mode-btn[data-mode="day"]   { --card-glow: var(--glow-navy); }
 
 /* Hero Card - Slightly Reduced */
 .hero-card {
@@ -238,6 +308,17 @@ main {
 
 .coin-preview {
   flex-shrink: 0;
+  position: relative;
+}
+
+/* Soft radial light behind the coin */
+.coin-preview::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(190, 185, 225, 0.14), transparent 65%);
+  pointer-events: none;
 }
 
 /* Improved Premium Metallic Coin Preview */
@@ -332,6 +413,27 @@ main {
 .rune-preview {
   margin-bottom: 4px;
   flex-shrink: 0;
+  position: relative;
+}
+
+/* Deep violet ambient behind Tarot preview */
+.tarot-preview::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--glow-violet), 0.16), transparent 68%);
+  pointer-events: none;
+}
+
+/* Cold indigo/lavender ambient behind Rune preview */
+.rune-preview::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--glow-indigo), 0.18), transparent 68%);
+  pointer-events: none;
 }
 
 /* Improved Tarot Card Back Design */
@@ -467,14 +569,34 @@ main {
   line-height: 1.4;
 }
 
-/* Fortune Screen with Page Transition */
+/* Fortune Screen with Page Transition + Screen Themes */
 .fortune {
+  --screen-glow-primary: var(--glow-lavender);
+  --screen-glow-secondary: var(--glow-blue);
   flex: 1;
   display: flex;
   flex-direction: column;
   padding-bottom: 24px;
   animation: pageTransition 280ms ease-out;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(var(--screen-glow-primary), 0.18), transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(var(--screen-glow-secondary), 0.10), transparent 45%);
+  transition: background 600ms ease;
 }
+
+/* Per-mode screen atmospheres */
+.fortune.screen--coin  { --screen-glow-primary: var(--glow-silver);  --screen-glow-secondary: var(--glow-blue); }
+.fortune.screen--tarot { --screen-glow-primary: var(--glow-violet);  --screen-glow-secondary: var(--glow-magenta); }
+.fortune.screen--rune  { --screen-glow-primary: var(--glow-indigo);  --screen-glow-secondary: var(--glow-blue); }
+.fortune.screen--daily { --screen-glow-primary: var(--glow-navy);    --screen-glow-secondary: var(--glow-violet); }
+
+/* Result atmosphere themes (override screen glow after reveal) */
+.fortune.theme-moon    { --screen-glow-primary: var(--glow-blue);     --screen-glow-secondary: var(--glow-violet); }
+.fortune.theme-sun     { --screen-glow-primary: var(--glow-amber);    --screen-glow-secondary: var(--glow-violet); }
+.fortune.theme-warning { --screen-glow-primary: var(--glow-burgundy); --screen-glow-secondary: var(--glow-violet); }
+.fortune.theme-calm    { --screen-glow-primary: var(--glow-indigo);   --screen-glow-secondary: var(--glow-lavender); }
+.fortune.theme-energy  { --screen-glow-primary: var(--glow-magenta);  --screen-glow-secondary: var(--glow-violet); }
+.fortune.theme-mystic  { --screen-glow-primary: var(--glow-violet);   --screen-glow-secondary: var(--glow-indigo); }
 
 @keyframes pageTransition {
   from {
@@ -801,17 +923,26 @@ main {
 
 /* Prediction Card */
 .prediction {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: var(--surface-gradient);
+  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 22px;
   margin: 28px 16px 20px;
   text-align: center;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 
-    0 10px 36px rgba(0, 0, 0, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.prediction::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 30%);
 }
 
 .prediction p {
@@ -858,16 +989,14 @@ main {
 
 /* History */
 .history {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: var(--surface-gradient);
+  border: 1px solid var(--border);
   border-radius: 18px;
   padding: 18px;
   margin: 0 16px 20px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 
-    0 8px 28px rgba(0, 0, 0, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
 }
 
 .history h3 {
