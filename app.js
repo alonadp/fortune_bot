@@ -1148,7 +1148,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A010',
     internalName: 'Зеркало',
-    image: null,
+    image: 'assets/association-cards/A010.webp',
     elements: [
       {
         id: 'person',
