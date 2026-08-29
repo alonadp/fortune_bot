@@ -1086,7 +1086,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A008',
     internalName: 'Стена',
-    image: null,
+    image: 'assets/association-cards/A008.webp',
     elements: [
       {
         id: 'wall',
