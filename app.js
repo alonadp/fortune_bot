@@ -1109,9 +1109,11 @@ function renderAssocFront(container, card) {
   container.innerHTML = '<span class="assoc-placeholder" aria-hidden="true">' +
     (ASSOC_PLACEHOLDERS[card.id] || ASSOC_PLACEHOLDERS.generic) + '</span>';
   if (card.image) {
+    // Ленивость обеспечивается самой механикой: лицо рендерится только для
+    // выбранной карты. Атрибут loading="lazy" здесь нельзя — отсоединённый
+    // от DOM img с ним не начинает загрузку, и onload никогда не сработает.
     const img = new Image();
     img.className = 'assoc-image';
-    img.loading = 'lazy';
     // Декоративное изображение: alt пустой, названия карт не спойлерим
     img.alt = '';
     img.onload = () => {
