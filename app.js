@@ -1055,7 +1055,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A007',
     internalName: 'Чемодан',
-    image: null,
+    image: 'assets/association-cards/A007.webp',
     elements: [
       {
         id: 'suitcase',
