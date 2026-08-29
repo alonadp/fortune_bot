@@ -1069,6 +1069,17 @@ const ASSOC_PLACEHOLDERS = {
     '<rect x="88" y="92 " width="14" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
     '<rect x="93" y="98" width="14" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.75"/>' +
     '</svg>',
+  // Выбор между нами: фигура на развилке, указатель, две дороги
+  A015:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M74 34 L74 74" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>' +
+    '<path d="M58 44 L90 44 L96 49 L90 54 L58 54 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<circle cx="60" cy="88" r="4.5" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>' +
+    '<path d="M60 93 C53 97 51 104 52 112 L68 112 C69 104 67 97 60 93 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.9"/>' +
+    '<path d="M54 124 C44 130 36 138 30 148" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.75"/>' +
+    '<path d="M66 124 C76 130 84 138 90 148" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.45"/>' +
+    '<circle cx="32" cy="118" r="6" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
