@@ -1057,6 +1057,18 @@ const ASSOC_PLACEHOLDERS = {
     '<circle cx="76" cy="101.5" r="1.5" fill="currentColor" opacity="0.85"/>' +
     '<path d="M84 74 C90 71 96 77 102 74" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>' +
     '</svg>',
+  // Недосказанность: окно с дождём, открытый дневник, фотографии
+  A014:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="34" y="34" width="52" height="44" rx="3" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>' +
+    '<path d="M60 34 L60 78 M34 56 L86 56" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
+    '<path d="M42 42 L42 47 M50 60 L50 65 M70 44 L70 49 M78 62 L78 67 M64 66 L64 70" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>' +
+    '<path d="M36 108 C44 102 54 102 60 106 C66 102 76 102 84 108 L84 126 C76 120 66 120 60 124 C54 120 44 120 36 126 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<path d="M60 106 L60 124" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>' +
+    '<path d="M42 110 L54 108 M42 115 L54 113 M66 108 L78 110 M66 113 L78 115" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4"/>' +
+    '<rect x="88" y="92 " width="14" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
+    '<rect x="93" y="98" width="14" height="11" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.75"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
