@@ -857,420 +857,77 @@ document.getElementById('buyStarsBtn')?.addEventListener('click', () => {
   }
 });
 
-// === «Что ты видишь?» — association / metaphoric cards ===
+// === «Ассоциативные карты» — интуитивный выбор образа ===
 //
-// Author deck, cards A001–A010. `internalName` is developer-only and is never
-// rendered to the user. Real illustrations will be added later: set `image`
-// to e.g. 'assets/association-cards/A001.webp' and the card front switches
-// from its CSS/SVG placeholder to the image automatically. While `image` is
-// null/undefined or fails to load, the placeholder is shown, so a broken
-// image can never appear.
-const ASSOCIATION_DECK = [
-  {
-    id: 'A001',
-    internalName: 'Дверь',
-    image: 'assets/association-cards/A001.webp?v=2',
-    elements: [
-      {
-        id: 'door',
-        label: 'Дверь',
-        insight: 'Возможно, сейчас ты особенно замечаешь саму возможность что-то изменить.',
-        question: 'Какой шаг уже доступен тебе, но ты всё ещё ждёшь подходящего момента?'
-      },
-      {
-        id: 'light',
-        label: 'Свет',
-        insight: 'Возможно, тебя сейчас больше притягивает не путь, а ощущение того, что где-то должно стать легче.',
-        question: 'Ты действительно хочешь туда — или просто больше не хочешь оставаться здесь?'
-      },
-      {
-        id: 'chair',
-        label: 'Стул',
-        insight: 'Иногда привычное удерживает нас не потому, что там хорошо, а потому, что оно знакомо.',
-        question: 'Что ты получаешь, оставаясь на месте?'
-      },
-      {
-        id: 'shadow',
-        label: 'Тень',
-        insight: 'Возможно, неизвестность сейчас занимает в твоих мыслях больше места, чем сама возможность.',
-        question: 'Что именно тебя пугает — реальный риск или отсутствие гарантий?'
-      }
-    ]
-  },
-  {
-    id: 'A002',
-    internalName: 'Лодка',
-    image: 'assets/association-cards/A002.webp?v=2',
-    elements: [
-      {
-        id: 'boat',
-        label: 'Лодка',
-        insight: 'Возможно, часть тебя уже готова двигаться дальше.',
-        question: 'Если бы решение зависело только от тебя, куда бы ты направилась?'
-      },
-      {
-        id: 'rope',
-        label: 'Верёвка',
-        insight: 'Иногда нас удерживает совсем небольшая вещь — но именно ей мы отдаём слишком много значения.',
-        question: 'Что на самом деле не позволяет тебе двинуться?'
-      },
-      {
-        id: 'water',
-        label: 'Вода',
-        insight: 'Возможно, сейчас тебе важнее не направление, а ощущение спокойствия.',
-        question: 'Тебе действительно нужно принять решение прямо сейчас?'
-      },
-      {
-        id: 'horizon',
-        label: 'Горизонт',
-        insight: 'Твоё внимание оказалось там, куда ещё невозможно дотянуться.',
-        question: 'Не слишком ли много сил сейчас уходит на то, чего ещё нет?'
-      }
-    ]
-  },
-  {
-    id: 'A003',
-    internalName: 'Развилка',
-    image: 'assets/association-cards/A003.webp?v=2',
-    elements: [
-      {
-        id: 'light_path',
-        label: 'Светлая дорога',
-        insight: 'Возможно, сейчас тебя притягивает вариант, который кажется понятнее и безопаснее.',
-        question: 'Ты выбираешь его потому, что хочешь — или потому, что он меньше пугает?'
-      },
-      {
-        id: 'dark_path',
-        label: 'Тёмная дорога',
-        insight: 'Иногда неизвестное притягивает именно потому, что там может оказаться что-то новое.',
-        question: 'Что бы ты выбрала, если бы не боялась ошибиться?'
-      },
-      {
-        id: 'sign',
-        label: 'Указатель',
-        insight: 'Возможно, тебе хочется получить подтверждение извне.',
-        question: 'Чьего разрешения или совета ты сейчас ждёшь?'
-      },
-      {
-        id: 'person',
-        label: 'Человек',
-        insight: 'Возможно, дело вообще не в двух дорогах, а в готовности сделать первый шаг.',
-        question: 'Какое решение ты уже практически приняла?'
-      }
-    ]
-  },
-  {
-    id: 'A004',
-    internalName: 'Мост',
-    image: 'assets/association-cards/A004.webp?v=2',
-    elements: [
-      {
-        id: 'bridge',
-        label: 'Мост',
-        insight: 'Возможно, ты уже видишь способ перейти из нынешней ситуации в другую.',
-        question: 'Какой переход сейчас кажется тебе самым важным?'
-      },
-      {
-        id: 'other_side',
-        label: 'Другой берег',
-        insight: 'Иногда мы настолько смотрим на результат, что забываем про путь к нему.',
-        question: 'Готова ли ты к тому, что находится между «сейчас» и «потом»?'
-      },
-      {
-        id: 'water',
-        label: 'Вода',
-        insight: 'Возможно, тебе сейчас хочется не перемен, а внутренней тишины.',
-        question: 'Что можно перестать контролировать хотя бы ненадолго?'
-      },
-      {
-        id: 'figure',
-        label: 'Фигура',
-        insight: 'Ты заметила человека раньше дороги.',
-        question: 'В этой ситуации ты больше думаешь о собственном выборе или о реакции других?'
-      }
-    ]
-  },
-  {
-    id: 'A005',
-    internalName: 'Открытая клетка',
-    image: 'assets/association-cards/A005.webp?v=2',
-    elements: [
-      {
-        id: 'bird',
-        label: 'Птица',
-        insight: 'Возможность двигаться уже может существовать, даже если готовность ещё не появилась.',
-        question: 'Что бы ты сделала, если бы точно знала, что можешь вернуться?'
-      },
-      {
-        id: 'cage',
-        label: 'Клетка',
-        insight: 'Иногда знакомые ограничения становятся частью ощущения безопасности.',
-        question: 'Что привычное тебе трудно оставить, даже если оно уже мешает?'
-      },
-      {
-        id: 'open_door',
-        label: 'Открытая дверца',
-        insight: 'Возможно, препятствие, которое раньше существовало, уже изменилось.',
-        question: 'Не продолжаешь ли ты ждать разрешения, которое тебе больше не требуется?'
-      },
-      {
-        id: 'sky',
-        label: 'Небо',
-        insight: 'Ты посмотрела не на ограничение, а на пространство вокруг него.',
-        question: 'Чего тебе сейчас хочется больше — определённости или свободы?'
-      }
-    ]
-  },
-  {
-    id: 'A006',
-    internalName: 'Лестница',
-    image: 'assets/association-cards/A006.webp?v=2',
-    elements: [
-      {
-        id: 'first_step',
-        label: 'Первая ступень',
-        insight: 'Возможно, сейчас тебе важнее конкретное действие, чем понимание всего пути.',
-        question: 'Какой самый маленький шаг можно сделать сегодня?'
-      },
-      {
-        id: 'stairs',
-        label: 'Ступени',
-        insight: 'Ты увидела путь как последовательность.',
-        question: 'Не пытаешься ли ты решить сразу то, что можно проходить постепенно?'
-      },
-      {
-        id: 'fog',
-        label: 'Туман',
-        insight: 'Неопределённость сейчас может быть центральной частью твоего вопроса.',
-        question: 'Что изменилось бы, если бы тебе не требовалось заранее знать результат?'
-      },
-      {
-        id: 'top',
-        label: 'Верх',
-        insight: 'Возможно, твоё внимание слишком далеко впереди.',
-        question: 'Что происходит прямо сейчас, пока ты думаешь о том, что будет потом?'
-      }
-    ]
-  },
-  {
-    id: 'A007',
-    internalName: 'Чемодан',
-    image: 'assets/association-cards/A007.webp?v=2',
-    elements: [
-      {
-        id: 'suitcase',
-        label: 'Чемодан',
-        insight: 'Возможно, внутри ты уже готовишься к перемене, даже если она ещё не произошла.',
-        question: 'Что ты уже мысленно оставила позади?'
-      },
-      {
-        id: 'train',
-        label: 'Поезд',
-        insight: 'Возможно, тебя беспокоит возможность, которая может пройти мимо.',
-        question: 'Ты действительно опаздываешь — или просто боишься упустить шанс?'
-      },
-      {
-        id: 'clock',
-        label: 'Часы',
-        insight: 'Сейчас особенно заметным для тебя оказалось время.',
-        question: 'Почему тебе кажется, что решение нужно принять именно сейчас?'
-      },
-      {
-        id: 'platform',
-        label: 'Пустая платформа',
-        insight: 'Возможно, сильнее всего ты почувствовала отсутствие людей.',
-        question: 'Чьей поддержки тебе хотелось бы в этой ситуации?'
-      }
-    ]
-  },
-  {
-    id: 'A008',
-    internalName: 'Стена',
-    image: 'assets/association-cards/A008.webp?v=2',
-    elements: [
-      {
-        id: 'wall',
-        label: 'Стена',
-        insight: 'Возможно, сейчас проблема ощущается значительно больше тебя.',
-        question: 'Что в этой ситуации действительно невозможно, а что просто очень сложно?'
-      },
-      {
-        id: 'crack',
-        label: 'Трещина',
-        insight: 'Ты первой заметила несовершенство препятствия.',
-        question: 'Где находится самое слабое место проблемы?'
-      },
-      {
-        id: 'light',
-        label: 'Свет',
-        insight: 'Даже среди ограничения твоё внимание нашло возможность.',
-        question: 'Что уже говорит тебе о том, что ситуация может измениться?'
-      },
-      {
-        id: 'person',
-        label: 'Человек',
-        insight: 'Возможно, тебя больше заинтересовало не препятствие, а тот, кто перед ним стоит.',
-        question: 'Что находится в зоне твоего влияния прямо сейчас?'
-      }
-    ]
-  },
-  {
-    id: 'A009',
-    internalName: 'Два стула',
-    image: 'assets/association-cards/A009.webp?v=2',
-    elements: [
-      {
-        id: 'first_chair',
-        label: 'Первый стул',
-        insight: 'Возможно, ты автоматически заняла одну из сторон этой истории.',
-        question: 'Что ты хотела бы сказать, сидя на этом месте?'
-      },
-      {
-        id: 'second_chair',
-        label: 'Второй стул',
-        insight: 'Твоё внимание сначала оказалось на другой стороне.',
-        question: 'Что ты пытаешься понять в другом человеке?'
-      },
-      {
-        id: 'distance',
-        label: 'Расстояние',
-        insight: 'Возможно, важнее самих людей сейчас стало то, что находится между ними.',
-        question: 'Что создаёт эту дистанцию?'
-      },
-      {
-        id: 'empty_space',
-        label: 'Пустое пространство',
-        insight: 'Возможно, эта история занимает меньше места, чем пространство вокруг неё.',
-        question: 'Что ещё существует в твоей жизни за пределами этой ситуации?'
-      }
-    ]
-  },
-  {
-    id: 'A010',
-    internalName: 'Зеркало',
-    image: 'assets/association-cards/A010.webp',
-    elements: [
-      {
-        id: 'person',
-        label: 'Человек',
-        insight: 'Возможно, сейчас тебе важнее то, какой ты себя ощущаешь.',
-        question: 'Чего хочется именно тебе, если на минуту убрать ожидания других?'
-      },
-      {
-        id: 'reflection',
-        label: 'Отражение',
-        insight: 'Возможно, твоё внимание привлекла другая версия возможного.',
-        question: 'Какой ты позволяешь себе быть только в мыслях?'
-      },
-      {
-        id: 'mirror',
-        label: 'Зеркало',
-        insight: 'Иногда мы ищем ответ, продолжая смотреть на ситуацию с одной и той же позиции.',
-        question: 'Что изменится, если посмотреть на неё совершенно иначе?'
-      },
-      {
-        id: 'surrounding_space',
-        label: 'Пространство вокруг',
-        insight: 'Ты заметила контекст раньше главного объекта.',
-        question: 'Не стала ли одна проблема занимать в твоей голове больше места, чем она занимает в жизни?'
-      }
-    ]
-  },
-  // --- Серия про отношения ---
-  {
-    id: 'A011',
-    internalName: 'Два берега',
-    image: 'assets/association-cards/A011.webp',
-    elements: [
-      {
-        id: 'two_people',
-        label: 'Двое',
-        insight: 'Возможно, для тебя сейчас главное не расстояние, а то, что вы всё ещё повёрнуты друг к другу.',
-        question: 'Что помогает вам оставаться лицом друг к другу, даже когда сблизиться пока не получается?'
-      },
-      {
-        id: 'water_between',
-        label: 'Вода между ними',
-        insight: 'Иногда мы лучше видим то, что разделяет, чем то, что соединяет. Возможно, дистанция сейчас кажется главной частью этой истории.',
-        question: 'Из чего на самом деле состоит это расстояние — и кто его поддерживает?'
-      },
-      {
-        id: 'reflection',
-        label: 'Отражение в воде',
-        insight: 'Возможно, тебе сейчас важнее не сами события, а то, как они отзываются внутри. Отражения говорят тише, но часто точнее.',
-        question: 'Что из этой истории продолжает отражаться в тебе, даже когда вы не рядом?'
-      },
-      {
-        id: 'sunset',
-        label: 'Закат',
-        insight: 'Мягкий свет над водой не обязательно означает конец — иногда это просто время суток, которое напоминает о времени вообще.',
-        question: 'Что в этих отношениях тебе хочется успеть сказать, пока светло?'
-      }
-    ]
-  },
-  {
-    id: 'A012',
-    internalName: 'Мост доверия',
-    image: 'assets/association-cards/A012.webp',
-    elements: [
-      {
-        id: 'lantern',
-        label: 'Фонарь',
-        insight: 'Возможно, тебе сейчас важно, чтобы кто-то оставлял для тебя свет — маленький знак, что тебя ждут на той стороне.',
-        question: 'Кто зажигает свет для тебя — и для кого его зажигаешь ты?'
-      },
-      {
-        id: 'ropes',
-        label: 'Верёвочные перила',
-        insight: 'Держаться за что-то — не слабость. Возможно, тебе сейчас хочется убедиться, что опора выдержит, прежде чем сделать шаг навстречу.',
-        question: 'За что ты держишься в этих отношениях — и насколько этой опоре можно доверять?'
-      },
-      {
-        id: 'fog_ahead',
-        label: 'Туман впереди',
-        insight: 'Конца моста не видно, и это может тревожить. Но, возможно, сейчас важнее не разглядеть финал, а идти, пока он понемногу проясняется.',
-        question: 'Готова ли ты идти навстречу, не зная заранее, что ждёт на другой стороне?'
-      },
-      {
-        id: 'planks',
-        label: 'Доски под ногами',
-        insight: 'Каждый шаг по такому мосту — маленькое решение довериться. Возможно, ты сейчас проверяешь на прочность то, на чём держится ваша связь.',
-        question: 'Какой маленький шаг доверия ты могла бы сделать первой?'
-      }
-    ]
-  },
-  {
-    id: 'A013',
-    internalName: 'Ожидание',
-    image: 'assets/association-cards/A013.webp',
-    elements: [
-      {
-        id: 'sitting_figure',
-        label: 'Сидящая у воды',
-        insight: 'Она не выглядит потерянной — скорее тихой. Возможно, ожидание для тебя сейчас не пустота, а способ побыть с собой.',
-        question: 'Чем наполнено твоё ожидание, когда никто не видит?'
-      },
-      {
-        id: 'boat_nearby',
-        label: 'Лодка у берега',
-        insight: 'Лодка совсем рядом, но пока не движется. Возможно, ты ждёшь, что кто-то приплывёт, — или сама решаешь, отплывать ли.',
-        question: 'Ты ждёшь чьего-то шага — или сама держишь лодку у берега?'
-      },
-      {
-        id: 'lantern_light',
-        label: 'Фонарь рядом',
-        insight: 'Маленький огонь горит, даже когда вокруг темнеет. Возможно, в тебе тоже есть что-то, что продолжает светить, пока ты ждёшь.',
-        question: 'Что поддерживает в тебе этот тихий свет — и для кого он горит?'
-      },
-      {
-        id: 'sunset_water',
-        label: 'Закат над водой',
-        insight: 'Свет уходит медленно, и в этом нет спешки. Возможно, тебе сейчас важно разрешить себе не торопить события.',
-        question: 'Что изменится, если позволить этому времени просто идти — не ускоряя его?'
-      }
-    ]
+// Механика: образ → личная ассоциация → вопрос к себе → подсказка.
+// Контент колоды отделён от UI и лежит в data/association-cards.json.
+// Файл (и изображения карт) загружается лениво — только когда пользователь
+// открывает раздел, чтобы не нагружать главный экран.
+
+// Строки раздела, создаваемые из JS, собраны здесь, чтобы позже их было
+// легко вынести в i18n (статичные строки экрана живут в index.html)
+const ASSOC_TEXT = {
+  pickCard: (n) => 'Выбрать карту ' + n,
+  loadError: 'Не получилось загрузить карты. Проверь соединение и попробуй ещё раз.'
+};
+
+// Точка расширения для будущей монетизации: сейчас сессии не ограничены.
+// Позже проверка лимитов добавится здесь, без переписывания механики.
+function canStartAssociationSession() {
+  return true;
+}
+
+// Лёгкая защита от повторов: id последних выбранных карт в localStorage
+const ASSOC_RECENT_KEY = 'recentAssociationCards';
+const ASSOC_RECENT_LIMIT = 5;
+
+function getRecentAssocIds() {
+  try {
+    const v = JSON.parse(localStorage.getItem(ASSOC_RECENT_KEY));
+    return Array.isArray(v) ? v : [];
+  } catch (e) {
+    return [];
   }
-];
+}
+
+function rememberAssocCard(id) {
+  const list = getRecentAssocIds().filter(x => x !== id);
+  list.push(id);
+  while (list.length > ASSOC_RECENT_LIMIT) list.shift();
+  try {
+    localStorage.setItem(ASSOC_RECENT_KEY, JSON.stringify(list));
+  } catch (e) {
+    // Fail silently
+  }
+}
+
+// Колода загружается один раз, при первом открытии раздела
+const AssocDeck = {
+  deckId: 'base',
+  cards: null,
+  promise: null,
+
+  load() {
+    if (this.cards) return Promise.resolve(this.cards);
+    if (!this.promise) {
+      this.promise = fetch('data/association-cards.json')
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(data => {
+          this.deckId = data.deckId || 'base';
+          this.cards = Array.isArray(data.cards) ? data.cards : [];
+          return this.cards;
+        })
+        .catch(err => {
+          this.promise = null;
+          throw err;
+        });
+    }
+    return this.promise;
+  }
+};
 
 // Simple conceptual SVG placeholders (technical stand-ins until the real
 // A001.webp…A010.webp illustrations are added)
@@ -1407,12 +1064,11 @@ const ASSOC_PLACEHOLDERS = {
     '</svg>'
 };
 
-// Screen states: choosing -> revealing -> observing -> associating -> result
+// Состояния экрана: choosing -> revealing -> observing -> reflecting -> hint
 const Assoc = {
   state: 'choosing',
   spread: [],
   chosenCard: null,
-  lastChosenId: null,
   busy: false,
   timers: [],
 
@@ -1425,12 +1081,19 @@ const Assoc = {
     this.timers = [];
   },
 
-  // 4 unique cards; avoids repeating the just-chosen card when the deck allows
-  sampleSpread() {
-    let pool = ASSOCIATION_DECK;
-    if (this.lastChosenId && pool.length - 1 >= 4) {
-      pool = pool.filter(c => c.id !== this.lastChosenId);
+  // 4 уникальные карты; по возможности без недавно выбранных (recentAssociationCards)
+  sampleSpread(cards) {
+    const recent = getRecentAssocIds();
+    let pool = cards.filter(c => !recent.includes(c.id));
+    // Graceful fallback для маленькой колоды: постепенно возвращаем
+    // самые давние из «недавних», пока карт не хватит на четвёрку
+    const readmit = recent.slice();
+    while (pool.length < 4 && readmit.length) {
+      const oldestId = readmit.shift();
+      const back = cards.find(c => c.id === oldestId);
+      if (back && pool.indexOf(back) === -1) pool.push(back);
     }
+    if (pool.length < 4) pool = cards.slice();
     const copy = pool.slice();
     for (let i = copy.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -1440,16 +1103,16 @@ const Assoc = {
   }
 };
 
-// Card front: real image when available, CSS/SVG placeholder otherwise.
-// The placeholder stays visible until the image actually loads, so a broken
-// image icon can never appear.
+// Лицо карты: реальное изображение, пока оно грузится (или если его нет /
+// оно не загрузилось) — CSS/SVG-заглушка. Сломанная иконка появиться не может.
 function renderAssocFront(container, card) {
   container.innerHTML = '<span class="assoc-placeholder" aria-hidden="true">' +
     (ASSOC_PLACEHOLDERS[card.id] || ASSOC_PLACEHOLDERS.generic) + '</span>';
   if (card.image) {
     const img = new Image();
     img.className = 'assoc-image';
-    // Decorative: internalName is developer-only and never shown to the user
+    img.loading = 'lazy';
+    // Декоративное изображение: alt пустой, названия карт не спойлерим
     img.alt = '';
     img.onload = () => {
       container.innerHTML = '';
@@ -1459,44 +1122,63 @@ function renderAssocFront(container, card) {
   }
 }
 
+function resetAssocBlocks() {
+  ['assocStage', 'assocObserve', 'assocReflect', 'assocHintBtn', 'assocHint', 'assocImagery', 'assocAgainBtn']
+    .forEach(id => { document.getElementById(id).style.display = 'none'; });
+}
+
 function startAssocRound() {
+  if (!canStartAssociationSession()) return;
+
   Assoc.clearTimers();
   Assoc.state = 'choosing';
   Assoc.busy = false;
   Assoc.chosenCard = null;
-  Assoc.spread = Assoc.sampleSpread();
 
-  document.getElementById('assocSubtitle').style.display = 'block';
-  document.getElementById('assocStage').style.display = 'none';
-  document.getElementById('assocQuestion').style.display = 'none';
-  document.getElementById('assocResult').style.display = 'none';
-  document.getElementById('assocAgainBtn').style.display = 'none';
+  const subtitle = document.getElementById('assocSubtitle');
+  if (!subtitle.dataset.defaultText) subtitle.dataset.defaultText = subtitle.textContent;
+  subtitle.textContent = subtitle.dataset.defaultText;
+  subtitle.style.display = 'block';
+  resetAssocBlocks();
   document.getElementById('assocBigCard').classList.remove('assoc-card--flipped');
 
   const grid = document.getElementById('assocGrid');
   grid.style.display = 'grid';
   grid.innerHTML = '';
-  Assoc.spread.forEach((card, i) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'assoc-card assoc-card--enter';
-    btn.style.animationDelay = (i * 70) + 'ms';
-    btn.setAttribute('aria-label', 'Закрытая карта ' + (i + 1));
-    btn.innerHTML = '<span class="assoc-back" aria-hidden="true"></span>';
-    btn.addEventListener('click', () => chooseAssocCard(card, btn));
-    grid.appendChild(btn);
+
+  AssocDeck.load().then(cards => {
+    if (Assoc.state !== 'choosing' || !cards.length) return;
+    Assoc.spread = Assoc.sampleSpread(cards);
+    // Подгружаем изображения только выбранной четвёрки, чтобы flip был мгновенным
+    Assoc.spread.forEach(card => {
+      if (card.image) { const im = new Image(); im.src = card.image; }
+    });
+    Assoc.spread.forEach((card, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'assoc-card assoc-card--enter';
+      btn.style.animationDelay = (i * 70) + 'ms';
+      // aria-label не раскрывает содержимое карты
+      btn.setAttribute('aria-label', ASSOC_TEXT.pickCard(i + 1));
+      btn.innerHTML = '<span class="assoc-back" aria-hidden="true"></span>';
+      btn.addEventListener('click', () => chooseAssocCard(card, btn));
+      grid.appendChild(btn);
+    });
+  }).catch(() => {
+    subtitle.textContent = ASSOC_TEXT.loadError;
   });
 }
 
 function chooseAssocCard(card, btn) {
   if (Assoc.busy || Assoc.state !== 'choosing') return;
+  // Немедленно блокируем выбор остальных карт (защита от двойного tap)
   Assoc.busy = true;
   Assoc.state = 'revealing';
   Assoc.chosenCard = card;
-  Assoc.lastChosenId = card.id;
+  rememberAssocCard(card.id);
   haptic('light');
 
-  // Prepare the big card, back side up, with this card's face
+  // Готовим большую карту: рубашкой вверх, лицо — выбранной карты
   renderAssocFront(document.getElementById('assocBigFront'), card);
   const bigCard = document.getElementById('assocBigCard');
   bigCard.classList.remove('assoc-card--flipped');
@@ -1504,19 +1186,20 @@ function chooseAssocCard(card, btn) {
   const grid = document.getElementById('assocGrid');
   const subtitle = document.getElementById('assocSubtitle');
   const stage = document.getElementById('assocStage');
+  Array.from(grid.children).forEach(el => { el.disabled = true; });
 
   if (DiceThought.prefersReducedMotion()) {
-    // Short reveal without movement or a long flip
+    // Короткое открытие без движения и долгого переворота
     grid.style.display = 'none';
     subtitle.style.display = 'none';
     stage.style.display = 'flex';
     bigCard.classList.add('assoc-card--flipped');
     haptic('select');
-    Assoc.setTimer(showAssocQuestion, 350);
+    Assoc.setTimer(showAssocObserve, 300);
     return;
   }
 
-  // The other three fade out; the chosen card drifts to the spread center
+  // Остальные три гаснут, не раскрываясь; выбранная уходит в центр
   const gridRect = grid.getBoundingClientRect();
   const rect = btn.getBoundingClientRect();
   const dx = (gridRect.left + gridRect.width / 2) - (rect.left + rect.width / 2);
@@ -1528,58 +1211,64 @@ function chooseAssocCard(card, btn) {
   btn.style.transform = `translate(${dx}px, ${dy}px) scale(1.12)`;
 
   Assoc.setTimer(() => {
-    // Swap to the centered stage card and flip it
+    // Переключаемся на большую карту в центре и переворачиваем её
     grid.style.display = 'none';
     subtitle.style.display = 'none';
     stage.style.display = 'flex';
     Assoc.setTimer(() => {
-      Assoc.state = 'observing';
       bigCard.classList.add('assoc-card--flipped');
       haptic('select');
-      // A quiet moment to just look at the image before the prompt appears
-      // (600ms flip + ~700ms observing pause)
-      Assoc.setTimer(showAssocQuestion, 600 + 700);
+      // 700ms flip + короткая пауза наедине с образом
+      Assoc.setTimer(showAssocObserve, 700 + 250);
     }, 60);
   }, 440);
 }
 
-function showAssocQuestion() {
+function showAssocObserve() {
+  Assoc.state = 'observing';
+  document.getElementById('assocObserve').style.display = 'block';
+  // Короткая UX-пауза (~2с): вопрос карты появляется мягко, чуть позже
+  Assoc.setTimer(showAssocReflection, 1800);
+}
+
+function showAssocReflection() {
   const card = Assoc.chosenCard;
   if (!card) return;
-  Assoc.state = 'associating';
-
-  const options = document.getElementById('assocOptions');
-  options.innerHTML = '';
-  card.elements.forEach(element => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'assoc-option';
-    b.textContent = element.label;
-    b.addEventListener('click', () => chooseAssocElement(element));
-    options.appendChild(b);
-  });
-
-  document.getElementById('assocQuestion').style.display = 'block';
+  Assoc.state = 'reflecting';
+  document.getElementById('assocReflectionQuestion').textContent = card.reflectionQuestion || '';
+  document.getElementById('assocReflect').style.display = 'block';
+  document.getElementById('assocHintBtn').style.display = 'flex';
   Assoc.busy = false;
 }
 
-function chooseAssocElement(element) {
-  if (Assoc.state !== 'associating') return;
-  Assoc.state = 'result';
+function showAssocHint() {
+  if (Assoc.state !== 'reflecting') return;
+  const card = Assoc.chosenCard;
+  if (!card) return;
+  Assoc.state = 'hint';
   haptic('select');
 
-  document.getElementById('assocQuestion').style.display = 'none';
-  document.getElementById('assocChoice').textContent = element.label;
-  document.getElementById('assocInsight').textContent = element.insight;
-  document.getElementById('assocReflection').textContent = element.question;
-  document.getElementById('assocResult').style.display = 'block';
+  document.getElementById('assocHintBtn').style.display = 'none';
+  document.getElementById('assocObserve').style.display = 'none';
+  document.getElementById('assocHintTitle').textContent = card.title || '';
+  document.getElementById('assocHintText').textContent = card.hint || '';
+
+  const imagery = document.getElementById('assocImagery');
+  if (Array.isArray(card.associations) && card.associations.length) {
+    document.getElementById('assocImageryLine').textContent = card.associations.join(' · ');
+    imagery.style.display = 'block';
+  } else {
+    imagery.style.display = 'none';
+  }
+
+  document.getElementById('assocHint').style.display = 'block';
   document.getElementById('assocAgainBtn').style.display = 'flex';
 
-  // Keep the top of the card in view when the result stretches the page
-  const stage = document.getElementById('assocStage');
-  if (stage.getBoundingClientRect().top < 0) {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  const hintEl = document.getElementById('assocHint');
+  hintEl.scrollIntoView({
+    behavior: DiceThought.prefersReducedMotion() ? 'auto' : 'smooth',
+    block: 'nearest'
+  });
 }
 
 function openAssocScreen() {
@@ -1600,7 +1289,10 @@ document.getElementById('assocBackBtn').addEventListener('click', () => {
   document.getElementById('modesScreen').style.display = 'flex';
 });
 
+document.getElementById('assocHintBtn').addEventListener('click', showAssocHint);
+
 document.getElementById('assocAgainBtn').addEventListener('click', () => {
+  if (!canStartAssociationSession()) return;
   haptic('light');
   startAssocRound();
   window.scrollTo({ top: 0, behavior: 'smooth' });
