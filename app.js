@@ -1204,7 +1204,8 @@ function chooseAssocCard(card, btn) {
       bigCard.classList.add('assoc-card--flipped');
       haptic('select');
       // A quiet moment to just look at the image before the prompt appears
-      Assoc.setTimer(showAssocQuestion, 600 + 550);
+      // (600ms flip + ~700ms observing pause)
+      Assoc.setTimer(showAssocQuestion, 600 + 700);
     }, 60);
   }, 440);
 }
