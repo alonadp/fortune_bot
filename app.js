@@ -931,7 +931,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A003',
     internalName: 'Развилка',
-    image: null,
+    image: 'assets/association-cards/A003.webp',
     elements: [
       {
         id: 'light_path',
