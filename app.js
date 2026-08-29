@@ -1117,7 +1117,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A009',
     internalName: 'Два стула',
-    image: null,
+    image: 'assets/association-cards/A009.webp',
     elements: [
       {
         id: 'first_chair',
