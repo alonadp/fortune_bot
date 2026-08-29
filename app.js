@@ -164,7 +164,6 @@ let currentMode = null;
 let flipCount = 0;
 let dailyFlips = 0;
 // Accumulated coin rotation so every toss spins forward from its current pose
-let coinRotX = 0;
 let coinRotY = 0;
 let lastFlipDate = null;
 let history = [];
@@ -501,9 +500,8 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     const coinInner = document.querySelector('.coin-inner');
     if (coinInner) {
       coinInner.style.transitionDuration = '0ms';
-      coinInner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      coinInner.style.transform = 'rotateY(0deg)';
     }
-    coinRotX = 0;
     coinRotY = 0;
     
     const cardInner = document.querySelector('.card-inner');
@@ -622,7 +620,6 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
   } else if (currentMode === 'yesno') {
     // Coin flip - YES/NO only
     const coinInner = document.querySelector('.coin-inner');
-    const coinEl = document.getElementById('coin');
     
     // Determine result FIRST — the animation only visualizes it
     const isYes = Math.random() < 0.5;
@@ -631,33 +628,24 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
     let tossDuration;
     
     if (reducedMotion) {
-      // Short direct flip to the result, no lift and no long spin
+      // Short direct flip to the result, no long spin
       tossDuration = 300;
-      coinRotX = isYes ? 0 : 180;
-      coinRotY = 0;
+      coinRotY = isYes ? 0 : 180;
       coinInner.style.transitionDuration = '250ms';
-      coinInner.style.transform = `rotateX(${coinRotX}deg) rotateY(${coinRotY}deg)`;
+      coinInner.style.transform = `rotateY(${coinRotY}deg)`;
     } else {
-      tossDuration = 1400;
-      // 3-5 fast X flips plus one gentle Y turn, landing exactly on ДА (0°) or НЕТ (180°)
+      tossDuration = 1300;
+      // 3-5 full spins around the vertical axis, landing exactly on ДА (0°) or НЕТ (180°)
       const spins = (Math.floor(Math.random() * 3) + 3) * 360;
-      const baseX = coinRotX + spins;
+      const baseY = coinRotY + spins;
       const finalFace = isYes ? 0 : 180;
-      coinRotX = baseX + ((((finalFace - baseX) % 360) + 360) % 360);
-      coinRotY += 360;
+      coinRotY = baseY + ((((finalFace - baseY) % 360) + 360) % 360);
       
       coinInner.style.transitionDuration = tossDuration + 'ms';
-      coinInner.style.transform = `rotateX(${coinRotX}deg) rotateY(${coinRotY}deg)`;
-      
-      // Lift / land / settle arc on the coin container
-      coinEl.style.setProperty('--coin-toss-duration', tossDuration + 'ms');
-      coinEl.classList.remove('coin--toss');
-      void coinEl.offsetWidth;
-      coinEl.classList.add('coin--toss');
+      coinInner.style.transform = `rotateY(${coinRotY}deg)`;
     }
     
     setTimeout(() => {
-      coinEl.classList.remove('coin--toss');
       haptic('medium');
       
       const result = isYes ? 'yes' : 'no';
