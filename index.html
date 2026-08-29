@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Гадание — Adminka Hub</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
   <div class="ambient-background" aria-hidden="true">
@@ -119,21 +119,19 @@
         <p class="fortune-subtitle" id="fortuneSubtitle" style="display: none;">Не знаешь, что тебе сейчас нужно услышать?</p>
 
         <div class="fortune-display">
-          <!-- 3D Premium Coin -->
+          <!-- 3D Satin-Silver Coin -->
           <div class="coin" id="coin">
             <div class="coin-inner">
               <div class="coin-side coin-heads">
-                <div class="coin-ring"></div>
-                <div class="coin-center">
-                  <span class="coin-label">ДА</span>
-                </div>
+                <span class="coin-label">ДА</span>
               </div>
               <div class="coin-side coin-tails">
-                <div class="coin-ring"></div>
-                <div class="coin-center">
-                  <span class="coin-label">НЕТ</span>
-                </div>
+                <span class="coin-label">НЕТ</span>
               </div>
+              <div class="coin-edge coin-edge--1" aria-hidden="true"></div>
+              <div class="coin-edge coin-edge--2" aria-hidden="true"></div>
+              <div class="coin-edge coin-edge--3" aria-hidden="true"></div>
+              <div class="coin-edge coin-edge--4" aria-hidden="true"></div>
             </div>
           </div>
 
@@ -229,6 +227,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=9"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
