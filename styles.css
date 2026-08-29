@@ -972,7 +972,7 @@ body.hide-home-hero header {
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: transform;
 }
 
@@ -1024,85 +1024,92 @@ body.hide-home-hero header {
   height: auto;
 }
 
-/* --- Observing prompt + association options --- */
-.assoc-question {
+/* --- Contemplation stage: image first, no interpretation yet --- */
+.assoc-observe {
   text-align: center;
-  padding: 20px 24px 4px;
+  padding: 18px 28px 0;
   animation: fadeInUp 320ms ease-out;
+}
+
+.assoc-observe-note {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(200, 185, 225, 0.6);
+  margin-bottom: 12px;
 }
 
 .assoc-prompt {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
-.assoc-options {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+.assoc-observe-detail {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-secondary);
 }
 
-.assoc-option {
-  padding: 9px 16px;
-  border-radius: 999px;
-  background: var(--surface-strong);
-  border: 1px solid rgba(157, 123, 255, 0.25);
-  color: var(--text-primary);
-  font-family: inherit;
-  font-size: 14.5px;
+/* --- Reflection question of the card --- */
+.assoc-reflect {
+  text-align: center;
+  padding: 18px 26px 0;
+  animation: fadeInUp 360ms ease-out;
+}
+
+.assoc-reflection {
+  font-size: 17px;
+  line-height: 1.5;
   font-weight: 500;
-  line-height: 1.35;
-  cursor: pointer;
-  transition: transform 150ms ease, border-color 150ms ease;
+  color: var(--lavender);
 }
 
-.assoc-option:active {
-  transform: scale(0.96);
-  border-color: rgba(157, 123, 255, 0.5);
-}
-
-/* --- Result --- */
-.assoc-result {
+/* --- Hint: glass/dark card --- */
+.assoc-hint {
   background: var(--surface-gradient);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 22px;
-  margin: 20px 20px 8px;
+  margin: 18px 20px 8px;
   text-align: center;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   animation: fadeInUp 340ms ease-out;
 }
 
-.assoc-caption {
-  font-size: 13px;
+.assoc-hint-label {
+  font-size: 12.5px;
   font-weight: 500;
+  letter-spacing: 0.04em;
   color: rgba(200, 185, 225, 0.6);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-.assoc-choice {
-  font-size: 18px;
+.assoc-hint-title {
+  font-size: 19px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
-.assoc-insight {
+.assoc-hint-text {
   font-size: 16px;
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.92);
-  margin-bottom: 18px;
+  white-space: pre-line;
 }
 
-.assoc-reflection {
-  font-size: 16px;
-  line-height: 1.55;
+.assoc-imagery {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(157, 123, 255, 0.14);
+}
+
+.assoc-imagery-line {
+  font-size: 14px;
   font-weight: 500;
-  color: var(--lavender);
+  color: var(--text-secondary);
 }
 
 .assoc .btn-primary {
@@ -1114,11 +1121,7 @@ body.hide-home-hero header {
     gap: 12px;
     padding: 0 20px;
   }
-  .assoc-option {
-    font-size: 14px;
-    padding: 8px 14px;
-  }
-  .assoc-insight,
+  .assoc-hint-text,
   .assoc-reflection {
     font-size: 15px;
   }
