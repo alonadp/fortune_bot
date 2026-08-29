@@ -900,7 +900,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A002',
     internalName: 'Лодка',
-    image: null,
+    image: 'assets/association-cards/A002.webp',
     elements: [
       {
         id: 'boat',
