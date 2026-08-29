@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Гадание — Adminka Hub</title>
+  <title>НЕ ГАДАЙ — Adminka Hub</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="styles.css?v=14">
 </head>
@@ -17,7 +17,7 @@
   <div class="container">
     <header>
       <div class="header-row">
-        <h1>Гадание</h1>
+        <h1>НЕ ГАДАЙ</h1>
         <svg class="brand-symbol" width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
           <circle cx="20" cy="20" r="18.5" stroke="currentColor" stroke-width="1" opacity="0.3"/>
           <path d="M20 7 L21.5 18.5 L28 20 L21.5 21.5 L20 33 L18.5 21.5 L12 20 L18.5 18.5 Z" fill="currentColor"/>
@@ -25,7 +25,7 @@
           <path d="M13.5 26.5 L15 25" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
         </svg>
       </div>
-      <p class="subtitle">Что хочешь узнать сегодня?</p>
+      <p class="subtitle">Когда не знаешь, что делать — посмотри иначе.</p>
       <p class="daily-mood" id="dailyMood" style="display: none;">
         <svg width="12" height="12" viewBox="0 0 48 48" fill="none" aria-hidden="true">
           <path d="M24 8 L26 22 L40 24 L26 26 L24 40 L22 26 L8 24 L22 22 Z" fill="currentColor"/>
@@ -38,7 +38,7 @@
       <!-- Выбор типа гадания -->
       <div class="modes" id="modesScreen">
         <!-- Hero Card: Монетка -->
-        <button class="hero-card mode-btn" data-mode="yesno" aria-label="Открыть гадание на монетке: Да или Нет">
+        <button class="hero-card mode-btn" data-mode="yesno" aria-label="Открыть монетку судьбы: Да или Нет">
           <div class="coin-preview" aria-hidden="true">
             <div class="coin-mini">
               <div class="coin-face">
@@ -54,7 +54,7 @@
 
         <!-- Grid Cards -->
         <div class="grid-cards">
-          <button class="card-item mode-btn" data-mode="taro" aria-label="Открыть гадание на картах Таро">
+          <button class="card-item mode-btn" data-mode="taro" aria-label="Открыть карту дня Таро">
             <div class="tarot-preview" aria-hidden="true">
               <svg class="tarot-icon" width="46" height="66" viewBox="0 0 46 66" fill="none">
                 <rect x="1" y="1" width="44" height="64" rx="7" stroke="currentColor" stroke-width="1.5" opacity="0.85"/>
@@ -66,7 +66,7 @@
             <p>Узнай, что готовит день</p>
           </button>
 
-          <button class="card-item mode-btn" data-mode="rune" aria-label="Открыть гадание на рунах">
+          <button class="card-item mode-btn" data-mode="rune" aria-label="Открыть руну дня">
             <div class="rune-preview" aria-hidden="true">
               <svg class="rune-symbol" width="48" height="48" viewBox="0 0 48 48">
                 <text x="24" y="36" text-anchor="middle" font-size="32" fill="currentColor">ᚠ</text>
@@ -297,6 +297,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=30"></script>
+  <script src="app.js?v=31"></script>
 </body>
 </html>
