@@ -1,8 +1,14 @@
 :root {
   /* === Gradient System: base === */
-  --bg-base: #070810;
+  --bg-base: #080B16;
   --bg-primary: var(--bg-base);
-  --bg-secondary: #0D0E13;
+  --bg-secondary: #0D1020;
+
+  /* === Accent system (dark editorial tech) === */
+  --accent: #9D7BFF;
+  --accent-light: #BDA8FF;
+  --accent-glow: rgba(108, 92, 231, 0.18);
+  --text-tertiary: rgba(220, 220, 230, 0.40);
 
   /* === Gradient System: glow palette (RGB triplets) === */
   --glow-violet: 126, 87, 194;
@@ -16,20 +22,20 @@
   --glow-burgundy: 130, 45, 70;
 
   /* === Gradient System: surfaces === */
-  --surface: rgba(255, 255, 255, 0.045);
-  --surface-strong: rgba(255, 255, 255, 0.065);
-  --surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.028));
-  --border: rgba(190, 165, 230, 0.12);
-  --border-highlight: rgba(190, 165, 230, 0.2);
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.06);
+  --surface-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+  --border: rgba(255, 255, 255, 0.07);
+  --border-highlight: rgba(255, 255, 255, 0.14);
 
   /* Legacy aliases (used across components) */
   --card-bg: var(--surface);
   --card-border: var(--border);
   
   /* Text */
-  --text-primary: #F5F5F7;
-  --text-secondary: rgba(255, 255, 255, 0.58);
-  --text-hint: rgba(255, 255, 255, 0.42);
+  --text-primary: rgba(255, 255, 255, 0.96);
+  --text-secondary: rgba(220, 220, 230, 0.66);
+  --text-hint: rgba(220, 220, 230, 0.40);
   
   /* Accents */
   --lavender: #B8A1E8;
@@ -60,14 +66,13 @@
   }
 }
 
-/* Almost-black foundation with deep ambient radial light */
+/* Deep navy-black foundation with one large soft violet light */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', sans-serif;
   background:
-    radial-gradient(ellipse at 25% 15%, rgba(105, 60, 180, 0.16), transparent 35%),
-    radial-gradient(ellipse at 85% 45%, rgba(50, 65, 150, 0.10), transparent 40%),
-    radial-gradient(ellipse at 20% 62%, rgba(105, 60, 180, 0.07), transparent 32%),
-    #070810;
+    radial-gradient(ellipse at 95% 28%, rgba(95, 70, 230, 0.30) 0%, rgba(70, 55, 190, 0.16) 25%, transparent 55%),
+    radial-gradient(ellipse at 8% 96%, rgba(95, 70, 230, 0.08), transparent 42%),
+    #080B16;
   color: var(--text-primary);
   min-height: 100vh;
   min-height: 100dvh;
@@ -81,8 +86,9 @@ body {
   overflow-x: hidden;
 }
 
-/* === Ambient Background: fixed colored light behind the UI === */
+/* === Ambient Background: retired in favor of the single body light spot === */
 .ambient-background {
+  display: none;
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -137,30 +143,6 @@ body {
   }
 }
 
-/* Subtle Decorative Stars */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(1px 1px at 18% 12%, rgba(184, 161, 232, 0.15), transparent),
-    radial-gradient(1px 1px at 82% 24%, rgba(197, 202, 209, 0.12), transparent),
-    radial-gradient(1px 1px at 45% 35%, rgba(184, 161, 232, 0.1), transparent),
-    radial-gradient(1px 1px at 92% 48%, rgba(197, 202, 209, 0.08), transparent),
-    radial-gradient(1px 1px at 28% 58%, rgba(184, 161, 232, 0.11), transparent),
-    radial-gradient(1px 1px at 68% 72%, rgba(197, 202, 209, 0.09), transparent),
-    radial-gradient(1px 1px at 15% 82%, rgba(184, 161, 232, 0.1), transparent),
-    radial-gradient(1px 1px at 78% 88%, rgba(197, 202, 209, 0.12), transparent);
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.6;
-}
-
 .container {
   position: relative;
   z-index: 1;
@@ -172,42 +154,36 @@ body::after {
   min-height: 100dvh;
 }
 
-/* Header - Reduced Spacing */
+/* Header - Left-aligned editorial layout */
 header {
-  text-align: center;
-  padding: 14px 20px 10px;
+  text-align: left;
+  padding: 22px 20px 12px;
   background: transparent;
 }
 
-/* Improved Mystical Symbol with Subtle Rotation */
-.mystical-symbol {
-  color: var(--lavender);
-  margin: 0 auto 8px;
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
   opacity: 0;
   animation: fadeInDown 0.6s ease-out forwards;
-  filter: drop-shadow(0 2px 12px rgba(184, 161, 232, 0.25));
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .mystical-symbol path:first-of-type {
-    transform-origin: center;
-    animation: gentleRotate 24s linear infinite;
-  }
-}
-
-@keyframes gentleRotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* Brand symbol: minimal four-ray star inside a thin circle */
+.brand-symbol {
+  flex-shrink: 0;
+  color: var(--accent-light);
+  filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.3));
 }
 
 header h1 {
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-size: clamp(42px, 11vw, 56px);
+  font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.5px;
-  opacity: 0;
-  animation: fadeInDown 0.6s ease-out 0.1s forwards;
+  letter-spacing: -1.2px;
+  line-height: 1.05;
 }
 
 .subtitle {
@@ -238,69 +214,63 @@ main {
 
 /* Modes Screen - Reduced Spacing */
 .modes {
-  padding: 0 16px 24px;
+  padding: 6px 18px 32px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* Glass Card Surface: dark translucent, ambient light shows through */
+/* Dark translucent surface: the background light passes through slightly */
 .mode-btn {
-  --card-glow: var(--glow-lavender);
-  background:
-    radial-gradient(circle at 20% 0%, rgba(var(--card-glow), 0.07), transparent 60%),
-    var(--surface-gradient);
+  background: var(--surface-gradient);
   border: 1px solid var(--border);
-  border-radius: 22px;
+  border-radius: 26px;
   padding: 0;
   cursor: pointer;
-  transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
-              background 180ms ease,
-              border-color 180ms ease,
-              box-shadow 180ms ease;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  transition: transform 160ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 160ms ease;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   color: var(--text-primary);
   text-align: left;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.16);
-}
-
-/* Subtle top light reflection — material feel */
-.mode-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 30%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .mode-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.985);
   border-color: var(--border-highlight);
 }
-
-/* Per-card ambient accents */
-.mode-btn[data-mode="yesno"] { --card-glow: var(--glow-silver); }
-.mode-btn[data-mode="taro"]  { --card-glow: var(--glow-magenta); }
-.mode-btn[data-mode="rune"]  { --card-glow: var(--glow-blue); }
-.mode-btn[data-mode="dice"]  { --card-glow: var(--glow-violet); }
-.mode-btn[data-mode="day"]   { --card-glow: var(--glow-navy); }
 
 /* Stagger entrance: dice card before daily card */
 .wide-card[data-mode="day"] { animation-delay: 0.6s; }
 
-/* Hero Card - Slightly Reduced */
+/* Hero Card: the main action */
 .hero-card {
-  padding: 22px 20px;
+  padding: 24px 20px;
   display: flex;
   align-items: center;
-  gap: 18px;
-  min-height: 120px;
+  gap: 20px;
+  min-height: 128px;
   opacity: 0;
   animation: fadeInUp 0.5s ease-out 0.3s forwards;
+}
+
+.hero-card::after {
+  content: '';
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 4 L13.5 10 L7.5 16" stroke="%23A78BFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>') center/contain no-repeat;
+  opacity: 0.8;
+}
+
+.hero-card .card-content {
+  padding-right: 26px;
 }
 
 @keyframes fadeInUp {
@@ -319,67 +289,54 @@ main {
   position: relative;
 }
 
-/* Soft radial light behind the coin */
+/* Soft violet glow under the coin */
 .coin-preview::before {
   content: '';
   position: absolute;
-  inset: -18px;
+  left: 15%;
+  bottom: -14px;
+  width: 70%;
+  height: 15px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(190, 185, 225, 0.14), transparent 65%);
+  background: rgba(108, 92, 231, 0.45);
+  filter: blur(16px);
   pointer-events: none;
 }
 
-/* Improved Premium Metallic Coin Preview */
+/* Simple modern metal disc — hardware-object feel */
 .coin-mini {
   width: 72px;
   height: 72px;
   position: relative;
-  transform-style: preserve-3d;
 }
 
 .coin-face {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: 
-    radial-gradient(circle at 30% 28%, var(--metal-highlight) 0%, var(--metal-light) 20%, var(--metal-mid) 48%, var(--metal-dark) 72%, var(--metal-mid) 88%, var(--metal-light) 100%);
+  background: radial-gradient(circle at 35% 30%, #ffffff, #d7d9df 45%, #aeb2bd 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    0 4px 16px var(--metal-shadow),
-    inset 0 3px 6px rgba(255, 255, 255, 0.15),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.4);
-  border: 2.5px solid var(--metal-dark);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   position: relative;
 }
 
-/* Decorative coin rings */
-.coin-face::before {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
+/* Single thin inner ring, no ornaments */
 .coin-face::after {
   content: '';
   position: absolute;
-  inset: 10px;
+  inset: 5px;
   border-radius: 50%;
-  border: 0.5px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.55);
 }
 
 .coin-text {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
-  color: var(--metal-dark);
+  color: #3A3D45;
   letter-spacing: 0.5px;
-  text-shadow: 
-    0 1px 2px rgba(255, 255, 255, 0.3),
-    0 -1px 1px rgba(0, 0, 0, 0.5);
   position: relative;
   z-index: 2;
 }
@@ -402,19 +359,19 @@ main {
 .grid-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
   opacity: 0;
   animation: fadeInUp 0.5s ease-out 0.4s forwards;
 }
 
 .card-item {
-  padding: 18px 14px 16px;
+  padding: 20px 14px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   text-align: center;
-  min-height: 132px;
+  min-height: 172px;
 }
 
 .tarot-preview,
@@ -424,74 +381,18 @@ main {
   position: relative;
 }
 
-/* Deep violet ambient behind Tarot preview */
-.tarot-preview::before {
-  content: '';
-  position: absolute;
-  inset: -16px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--glow-violet), 0.16), transparent 68%);
-  pointer-events: none;
+/* Minimal geometric Tarot icon */
+.tarot-icon {
+  color: var(--accent-light);
+  filter: drop-shadow(0 0 12px rgba(108, 92, 231, 0.25));
 }
 
-/* Cold indigo/lavender ambient behind Rune preview */
-.rune-preview::before {
-  content: '';
-  position: absolute;
-  inset: -14px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--glow-indigo), 0.18), transparent 68%);
-  pointer-events: none;
-}
-
-/* Improved Tarot Card Back Design */
-.tarot-card-mini {
-  width: 54px;
-  height: 90px;
-  border-radius: 7px;
-  background: linear-gradient(145deg, #1a1d28, #0f1118);
-  border: 1.5px solid var(--lavender);
-  box-shadow: 
-    0 6px 18px rgba(138, 103, 204, 0.28),
-    inset 0 1px 2px rgba(184, 161, 232, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Premium Card Back Pattern */
-.tarot-card-back {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background: linear-gradient(145deg, rgba(184, 161, 232, 0.08), transparent);
-}
-
-.tarot-card-back::before {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border: 1px solid var(--lavender);
-  border-radius: 4px;
-  opacity: 0.4;
-}
-
-.tarot-card-back::after {
-  content: '✦';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 24px;
-  color: var(--lavender);
-  opacity: 0.5;
-}
-
-/* Enlarged Rune Symbol */
+/* Rune: flat minimal glyph, light violet */
 .rune-symbol {
   width: 62px;
   height: 62px;
-  color: #D3D0E4;
-  filter: drop-shadow(0 0 10px rgba(160, 130, 220, 0.2));
+  color: #BDA8FF;
+  filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.25));
 }
 
 .rune-symbol text {
@@ -506,19 +407,21 @@ main {
   line-height: 1.3;
 }
 
-/* Remove secondary labels */
+/* Short secondary description */
 .card-item p {
-  display: none;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.35;
 }
 
-/* Add arrow indicator */
+/* Arrow indicator */
 .card-item::after {
   content: '';
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   margin-top: auto;
-  background: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3 L11 8 L6 13" stroke="%23B8A1E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') center/contain no-repeat;
-  opacity: 0.6;
+  background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 4 L13.5 10 L7.5 16" stroke="%23A78BFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>') center/contain no-repeat;
+  opacity: 0.8;
 }
 
 /* Wide Card - Improved Daily Forecast */
@@ -535,32 +438,26 @@ main {
 .wide-card::after {
   content: '';
   position: absolute;
-  right: 20px;
+  right: 18px;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  background: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3 L11 8 L6 13" stroke="%23B8A1E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') center/contain no-repeat;
-  opacity: 0.6;
+  width: 20px;
+  height: 20px;
+  background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 4 L13.5 10 L7.5 16" stroke="%23A78BFA" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>') center/contain no-repeat;
+  opacity: 0.8;
 }
 
-/* Celestial Icon with Orbit */
+/* Forecast brand symbol */
 .celestial-icon {
   flex-shrink: 0;
-  color: var(--lavender);
-  filter: drop-shadow(0 2px 10px rgba(184, 161, 232, 0.35));
+  color: var(--accent-light);
+  filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.3));
   position: relative;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .celestial-icon circle {
-    transform-origin: center;
-    animation: gentleRotate 20s linear infinite;
-  }
 }
 
 .wide-card .card-content {
   flex: 1;
+  padding-right: 26px;
 }
 
 .wide-card h3 {
@@ -583,13 +480,13 @@ main {
 .daily-mood {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   font-size: 13px;
   line-height: 1.4;
-  color: var(--lavender);
-  opacity: 0.75;
-  margin: 10px 24px 0;
+  color: var(--accent-light);
+  opacity: 0.8;
+  margin: 12px 0 0;
 }
 
 .daily-mood svg {
@@ -621,16 +518,10 @@ main {
   to { opacity: 0.75; transform: translateY(0); }
 }
 
-/* Tiny muted marker on cards already opened today */
+/* Daily progress dots: state logic kept, visual display retired
+   (they read as notification badges) */
 .done-dot {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(184, 161, 232, 0.45);
-  pointer-events: none;
+  display: none;
 }
 
 /* === Dice Thought (Кубик мысли) === */
@@ -669,10 +560,6 @@ main {
 .dice-mini .pip:nth-child(2) { grid-area: 2 / 2; }
 .dice-mini .pip:nth-child(3) { grid-area: 3 / 3; }
 
-/* Keep the dice card subtitle clear of the chevron on narrow screens */
-.wide-card[data-mode="dice"] .card-content {
-  padding-right: 30px;
-}
 
 /* Big 3D dice on its screen */
 .dice-scene {

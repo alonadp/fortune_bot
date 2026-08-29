@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Гадание — Adminka Hub</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
   <div class="ambient-background" aria-hidden="true">
@@ -16,12 +16,15 @@
 
   <div class="container">
     <header>
-      <svg class="mystical-symbol" width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-        <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
-        <path d="M24 8 L26 22 L40 24 L26 26 L24 40 L22 26 L8 24 L22 22 Z" fill="currentColor" opacity="0.5"/>
-        <circle cx="24" cy="24" r="3" fill="currentColor"/>
-      </svg>
-      <h1>Гадание</h1>
+      <div class="header-row">
+        <h1>Гадание</h1>
+        <svg class="brand-symbol" width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <circle cx="20" cy="20" r="18.5" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+          <path d="M20 7 L21.5 18.5 L28 20 L21.5 21.5 L20 33 L18.5 21.5 L12 20 L18.5 18.5 Z" fill="currentColor"/>
+          <path d="M26.5 13.5 L25 15" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <path d="M13.5 26.5 L15 25" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+      </div>
       <p class="subtitle">Что хочешь узнать сегодня?</p>
       <p class="daily-mood" id="dailyMood" style="display: none;">
         <svg width="12" height="12" viewBox="0 0 48 48" fill="none" aria-hidden="true">
@@ -53,11 +56,14 @@
         <div class="grid-cards">
           <button class="card-item mode-btn" data-mode="taro" aria-label="Открыть гадание на картах Таро">
             <div class="tarot-preview" aria-hidden="true">
-              <div class="tarot-card-mini">
-                <div class="tarot-card-back"></div>
-              </div>
+              <svg class="tarot-icon" width="46" height="66" viewBox="0 0 46 66" fill="none">
+                <rect x="1" y="1" width="44" height="64" rx="7" stroke="currentColor" stroke-width="1.5" opacity="0.85"/>
+                <rect x="6.5" y="6.5" width="33" height="53" rx="4.5" stroke="currentColor" stroke-width="1" opacity="0.35"/>
+                <path d="M23 24 L24.6 31.4 L32 33 L24.6 34.6 L23 42 L21.4 34.6 L14 33 L21.4 31.4 Z" fill="currentColor" opacity="0.9"/>
+              </svg>
             </div>
             <h3>Карта дня</h3>
+            <p>Узнай, что готовит день</p>
           </button>
 
           <button class="card-item mode-btn" data-mode="rune" aria-label="Открыть гадание на рунах">
@@ -67,6 +73,7 @@
               </svg>
             </div>
             <h3>Руна дня</h3>
+            <p>Совет и знак на сегодня</p>
           </button>
         </div>
 
@@ -87,9 +94,9 @@
 
         <!-- Wide Card: Прогноз -->
         <button class="wide-card mode-btn" data-mode="day" aria-label="Получить прогноз на день">
-          <svg class="celestial-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <path d="M16 2 L18 14 L30 16 L18 18 L16 30 L14 18 L2 16 L14 14 Z" stroke="currentColor" stroke-width="1.5"/>
-            <circle cx="16" cy="16" r="3" fill="currentColor"/>
+          <svg class="celestial-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <circle cx="20" cy="20" r="18.5" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+            <path d="M20 8 L21.4 18.6 L28 20 L21.4 21.4 L20 32 L18.6 21.4 L12 20 L18.6 18.6 Z" fill="currentColor"/>
           </svg>
           <div class="card-content">
             <h3>Прогноз на день</h3>
@@ -222,6 +229,6 @@
     </main>
   </div>
 
-  <script src="app.js?v=8"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>
