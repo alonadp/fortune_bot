@@ -468,8 +468,8 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     document.getElementById('modesScreen').style.display = 'none';
     document.getElementById('fortuneScreen').style.display = 'flex';
     setScreenTheme(currentMode);
-    // The dice screen starts compactly, without the big home hero
-    document.body.classList.toggle('hide-home-hero', currentMode === 'dice');
+    // Inner screens start compactly, without the big editorial home header
+    document.body.classList.add('hide-home-hero');
     
     const titles = {
       yesno: 'Монетка судьбы',
