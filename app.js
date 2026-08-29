@@ -564,9 +564,9 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
   // Dice throws are free and unlimited
   if (currentMode !== 'dice' && !checkDailyLimit() && flipCount === 0) {
     if (tg && tg.showAlert) {
-      tg.showAlert("Бесплатное гадание уже использовано сегодня! Смотри рекламу или покупай Stars для дополнительных попыток.");
+      tg.showAlert("Бесплатная попытка уже использована сегодня! Смотри рекламу или покупай Stars для дополнительных попыток.");
     } else {
-      alert("Бесплатное гадание уже использовано сегодня!");
+      alert("Бесплатная попытка уже использована сегодня!");
     }
     return;
   }
