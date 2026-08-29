@@ -869,7 +869,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A001',
     internalName: 'Дверь',
-    image: 'assets/association-cards/A001.webp',
+    image: 'assets/association-cards/A001.webp?v=2',
     elements: [
       {
         id: 'door',
@@ -900,7 +900,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A002',
     internalName: 'Лодка',
-    image: 'assets/association-cards/A002.webp',
+    image: 'assets/association-cards/A002.webp?v=2',
     elements: [
       {
         id: 'boat',
@@ -931,7 +931,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A003',
     internalName: 'Развилка',
-    image: 'assets/association-cards/A003.webp',
+    image: 'assets/association-cards/A003.webp?v=2',
     elements: [
       {
         id: 'light_path',
@@ -962,7 +962,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A004',
     internalName: 'Мост',
-    image: 'assets/association-cards/A004.webp',
+    image: 'assets/association-cards/A004.webp?v=2',
     elements: [
       {
         id: 'bridge',
@@ -993,7 +993,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A005',
     internalName: 'Открытая клетка',
-    image: 'assets/association-cards/A005.webp',
+    image: 'assets/association-cards/A005.webp?v=2',
     elements: [
       {
         id: 'bird',
@@ -1024,7 +1024,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A006',
     internalName: 'Лестница',
-    image: 'assets/association-cards/A006.webp',
+    image: 'assets/association-cards/A006.webp?v=2',
     elements: [
       {
         id: 'first_step',
@@ -1055,7 +1055,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A007',
     internalName: 'Чемодан',
-    image: 'assets/association-cards/A007.webp',
+    image: 'assets/association-cards/A007.webp?v=2',
     elements: [
       {
         id: 'suitcase',
@@ -1086,7 +1086,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A008',
     internalName: 'Стена',
-    image: 'assets/association-cards/A008.webp',
+    image: 'assets/association-cards/A008.webp?v=2',
     elements: [
       {
         id: 'wall',
@@ -1117,7 +1117,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A009',
     internalName: 'Два стула',
-    image: 'assets/association-cards/A009.webp',
+    image: 'assets/association-cards/A009.webp?v=2',
     elements: [
       {
         id: 'first_chair',
