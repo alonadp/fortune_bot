@@ -1024,7 +1024,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A006',
     internalName: 'Лестница',
-    image: null,
+    image: 'assets/association-cards/A006.webp',
     elements: [
       {
         id: 'first_step',
