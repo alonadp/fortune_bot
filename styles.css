@@ -243,7 +243,8 @@ main {
   border-color: var(--border-highlight);
 }
 
-/* Stagger entrance: dice card before daily card */
+/* Stagger entrance: dice card, then association card, then daily card */
+.wide-card[data-mode="assoc"] { animation-delay: 0.55s; }
 .wide-card[data-mode="day"] { animation-delay: 0.6s; }
 
 /* Hero Card: the main action */
@@ -462,6 +463,14 @@ main {
 
 /* Forecast brand symbol */
 .celestial-icon {
+  flex-shrink: 0;
+  color: var(--accent-light);
+  filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.3));
+  position: relative;
+}
+
+/* Association cards icon: two overlapping minimal card outlines */
+.assoc-icon {
   flex-shrink: 0;
   color: var(--accent-light);
   filter: drop-shadow(0 0 10px rgba(108, 92, 231, 0.3));
@@ -815,6 +824,304 @@ body.hide-home-hero header {
   }
   .dice-face { border-radius: 15px; }
   .dice-face .pip { width: 11px; height: 11px; }
+}
+
+/* === «Что ты видишь?» — association cards screen === */
+
+.assoc {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+  animation: pageTransition 280ms ease-out;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(var(--glow-violet), 0.16), transparent 42%),
+    radial-gradient(circle at 85% 88%, rgba(var(--glow-indigo), 0.10), transparent 45%);
+}
+
+.assoc h2 {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 8px 0 10px;
+  padding: 0 20px;
+  color: var(--text-primary);
+}
+
+.assoc-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 32px 6px;
+}
+
+/* --- 2x2 spread of closed cards --- */
+.assoc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+  max-width: 400px;
+  margin: 14px auto 0;
+  padding: 0 24px;
+}
+
+/* One physical card. Base element is also reused for the big revealed card. */
+.assoc-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 430ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              opacity 320ms ease;
+  will-change: transform;
+}
+
+/* Quiet stagger entrance, then the cards stay still */
+.assoc-card--enter {
+  animation: assocCardIn 360ms ease-out backwards;
+}
+
+@keyframes assocCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* The three unchosen cards softly leave */
+.assoc-card--dismissed {
+  opacity: 0;
+  transform: scale(0.94);
+  pointer-events: none;
+}
+
+.assoc-card--chosen {
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* --- Card back: dark graphite + violet accent, feels like a physical card --- */
+.assoc-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(125, 95, 220, 0.10), transparent 62%),
+    linear-gradient(160deg, #1A1926, #0F0F17);
+  border: 1px solid rgba(157, 123, 255, 0.28);
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 150ms ease;
+}
+
+/* Second, inner border */
+.assoc-back::before {
+  content: '';
+  position: absolute;
+  inset: 7px;
+  border-radius: 11px;
+  border: 1px solid rgba(157, 123, 255, 0.14);
+  pointer-events: none;
+}
+
+/* Small geometric symbol in the center: thin rhombus */
+.assoc-back::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 1.2px solid rgba(189, 168, 255, 0.55);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Short press feedback on the back only (the card itself may be mid-move) */
+.assoc-card:active .assoc-back {
+  transform: scale(0.97);
+}
+
+/* --- Revealed card stage --- */
+.assoc-stage {
+  display: flex;
+  justify-content: center;
+  padding: 16px 20px 4px;
+  animation: assocFadeIn 220ms ease-out;
+}
+
+@keyframes assocFadeIn {
+  from { opacity: 0; }
+}
+
+.assoc-card--big {
+  width: clamp(160px, 50vw, 195px);
+  perspective: 900px;
+  cursor: default;
+}
+
+.assoc-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.assoc-card--flipped .assoc-card-inner {
+  transform: rotateY(180deg);
+}
+
+.assoc-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Front: frame for future real images; placeholder art for now */
+.assoc-front {
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(circle at 50% 36%, rgba(125, 95, 220, 0.12), transparent 65%),
+    linear-gradient(160deg, #171623, #0D0D14);
+  border: 1px solid rgba(157, 123, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Future real card image */
+.assoc-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* CSS/SVG conceptual placeholder while a card has no image */
+.assoc-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(189, 168, 255, 0.8);
+}
+
+.assoc-placeholder svg {
+  width: 62%;
+  height: auto;
+}
+
+/* --- Observing prompt + association options --- */
+.assoc-question {
+  text-align: center;
+  padding: 20px 24px 4px;
+  animation: fadeInUp 320ms ease-out;
+}
+
+.assoc-prompt {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+
+.assoc-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.assoc-option {
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  border: 1px solid rgba(157, 123, 255, 0.25);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 150ms ease;
+}
+
+.assoc-option:active {
+  transform: scale(0.96);
+  border-color: rgba(157, 123, 255, 0.5);
+}
+
+/* --- Result --- */
+.assoc-result {
+  background: var(--surface-gradient);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px;
+  margin: 20px 20px 8px;
+  text-align: center;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: fadeInUp 340ms ease-out;
+}
+
+.assoc-caption {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(200, 185, 225, 0.6);
+  margin-bottom: 6px;
+}
+
+.assoc-choice {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.assoc-insight {
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 18px;
+}
+
+.assoc-reflection {
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--lavender);
+}
+
+.assoc .btn-primary {
+  margin-top: 14px;
+}
+
+@media (max-width: 360px) {
+  .assoc-grid {
+    gap: 12px;
+    padding: 0 20px;
+  }
+  .assoc-option {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+  .assoc-insight,
+  .assoc-reflection {
+    font-size: 15px;
+  }
 }
 
 /* Fortune Screen with Page Transition + Screen Themes */

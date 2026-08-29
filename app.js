@@ -467,6 +467,13 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     haptic('select');
     currentMode = btn.dataset.mode;
     
+    // «Что ты видишь?» lives on its own screen with its own flow
+    if (currentMode === 'assoc') {
+      currentMode = null;
+      openAssocScreen();
+      return;
+    }
+    
     document.getElementById('modesScreen').style.display = 'none';
     document.getElementById('fortuneScreen').style.display = 'flex';
     setScreenTheme(currentMode);
@@ -848,6 +855,421 @@ document.getElementById('buyStarsBtn')?.addEventListener('click', () => {
   } else {
     alert("Покупка Stars...");
   }
+});
+
+// === «Что ты видишь?» — association / metaphoric cards ===
+//
+// DEMO DECK. Real author illustrations will be added later: set `image` to a
+// path like 'assets/association-cards/card-001.webp' and the card front
+// switches from its CSS/SVG placeholder to the image automatically. While
+// `image` is null/undefined or fails to load, the placeholder is shown, so a
+// broken image can never appear.
+const ASSOCIATION_DECK = [
+  {
+    id: 'door_01',
+    image: null,
+    title: 'Дверь и свет',
+    elements: [
+      {
+        id: 'door',
+        label: 'Дверь',
+        insight: 'Возможно, твоё внимание сейчас больше направлено на возможность выйти из ситуации, чем на то, что удерживает тебя внутри.',
+        question: 'Какую дверь ты давно видишь, но пока не решаешься открыть?'
+      },
+      {
+        id: 'light',
+        label: 'Свет',
+        insight: 'Иногда мы замечаем первым то, чего нам не хватает. Свет за дверью может быть про надежду, что дальше будет легче.',
+        question: 'Что для тебя сейчас стало бы светом — пусть даже совсем небольшим?'
+      },
+      {
+        id: 'darkness',
+        label: 'Темнота',
+        insight: 'Возможно, сейчас важнее не то, куда идти, а то, что осталось неосвещённым. Непонятное — не обязательно плохое.',
+        question: 'О чём ты уже догадываешься, но пока не хочешь рассматривать ближе?'
+      },
+      {
+        id: 'space',
+        label: 'Пустое пространство',
+        insight: 'Пустота вокруг может ощущаться как одиночество — а может быть свободным местом для чего-то нового. Попробуй посмотреть на неё вторым взглядом.',
+        question: 'Чем бы ты заполнила это пространство, если бы могла выбрать что угодно?'
+      }
+    ]
+  },
+  {
+    id: 'road_02',
+    image: null,
+    title: 'Развилка',
+    elements: [
+      {
+        id: 'road',
+        label: 'Дорога',
+        insight: 'Возможно, тебе сейчас ближе само движение, чем конкретная цель. Дорога под ногами — это уже выбор.',
+        question: 'Куда ты сейчас идёшь по привычке, а куда — по желанию?'
+      },
+      {
+        id: 'fork',
+        label: 'Развилка',
+        insight: 'Иногда мы застреваем не потому, что нет пути, а потому что путей два. Возможно, сам выбор занимает больше места, чем кажется.',
+        question: 'Какое решение ты откладываешь, потому что оба варианта чем-то дороги?'
+      },
+      {
+        id: 'horizon',
+        label: 'Горизонт',
+        insight: 'Взгляд вдаль может быть про желание заранее увидеть, чем всё закончится. Но горизонт открывается только по мере движения.',
+        question: 'Что изменилось бы, если разрешить себе не знать финал заранее?'
+      }
+    ]
+  },
+  {
+    id: 'circle_03',
+    image: null,
+    title: 'Круг и фигура',
+    elements: [
+      {
+        id: 'circle',
+        label: 'Круг',
+        insight: 'Круг часто замечают первым те, кому сейчас важны границы — свои или чужие. Возможно, хочется ясности, где заканчивается твоё.',
+        question: 'Внутри какого круга тебе спокойно, а какой уже стал тесен?'
+      },
+      {
+        id: 'figure',
+        label: 'Маленькая фигура',
+        insight: 'Возможно, ты сейчас ощущаешь себя меньше ситуации, в которой находишься. Это ощущение — не факт, а масштаб взгляда.',
+        question: 'Если посмотреть на ситуацию издалека, что в ней на самом деле большое?'
+      },
+      {
+        id: 'distance',
+        label: 'Расстояние между ними',
+        insight: 'Иногда первым замечается не предмет, а дистанция. Возможно, сейчас для тебя важна тема «ближе или дальше».',
+        question: 'К чему тебе хочется приблизиться, а от чего — отойти на шаг?'
+      }
+    ]
+  },
+  {
+    id: 'shapes_04',
+    image: null,
+    title: 'Две фигуры',
+    elements: [
+      {
+        id: 'both',
+        label: 'Обе фигуры',
+        insight: 'Возможно, тебе сейчас близка тема диалога: двое разных, но стоящих рядом. Разность — не всегда конфликт.',
+        question: 'С кем тебе стоит поговорить не ради победы, а ради ясности?'
+      },
+      {
+        id: 'sharp',
+        label: 'Угловатая фигура',
+        insight: 'Острые формы часто замечают, когда внутри есть напряжение. Возможно, что-то ждёт от тебя прямого ответа.',
+        question: 'Где тебе сейчас нужно сказать точнее и проще, чем обычно?'
+      },
+      {
+        id: 'round',
+        label: 'Округлая фигура',
+        insight: 'Мягкая форма может быть про потребность в спокойствии и поддержке — без условий и споров.',
+        question: 'Что помогает тебе смягчаться — и было ли это у тебя на этой неделе?'
+      },
+      {
+        id: 'gap',
+        label: 'Пространство между ними',
+        insight: 'Возможно, важнее всего сейчас не стороны, а то, что между ними: пауза, тишина, недосказанное.',
+        question: 'Какая пауза в твоей жизни затянулась — и чья очередь делать шаг?'
+      }
+    ]
+  },
+  {
+    id: 'stairs_05',
+    image: null,
+    title: 'Лестница',
+    elements: [
+      {
+        id: 'steps',
+        label: 'Ступени',
+        insight: 'Возможно, тебе сейчас ближе идея постепенности: не всё сразу, а по одной ступени. Это не медленно — это надёжно.',
+        question: 'Какой маленький шаг доступен тебе уже сегодня?'
+      },
+      {
+        id: 'top',
+        label: 'Верх лестницы',
+        insight: 'Взгляд наверх может быть про цель. А иногда — про ожидания, которые кто-то поставил за тебя.',
+        question: 'Куда ведёт твоя лестница — и ты ли выбирала это направление?'
+      },
+      {
+        id: 'bottom',
+        label: 'Начало внизу',
+        insight: 'Иногда мы оглядываемся на начало, чтобы понять, сколько уже пройдено. Возможно, этому пути не хватает твоего признания.',
+        question: 'Что из уже сделанного ты так и не разрешила себе засчитать?'
+      }
+    ]
+  },
+  {
+    id: 'window_06',
+    image: null,
+    title: 'Окно',
+    elements: [
+      {
+        id: 'window',
+        label: 'Окно',
+        insight: 'Окно — возможность видеть, оставаясь внутри. Возможно, тебе сейчас ближе наблюдать, чем участвовать. Это тоже позиция.',
+        question: 'За чем ты наблюдаешь со стороны, хотя внутри уже есть своё мнение?'
+      },
+      {
+        id: 'outside',
+        label: 'То, что снаружи',
+        insight: 'Возможно, внимание тянется наружу — к тому, что за пределами привычного. Любопытство редко бывает случайным.',
+        question: 'Что за пределами твоей привычной жизни давно тебя зовёт?'
+      },
+      {
+        id: 'frame',
+        label: 'Рама',
+        insight: 'Рама задаёт границы вида. Иногда мы замечаем не картину, а рамки, через которые смотрим на неё.',
+        question: 'Какая привычная рамка сужает твой взгляд на ситуацию?'
+      }
+    ]
+  }
+];
+
+// Simple conceptual SVG placeholders (technical stand-ins for future art)
+const ASSOC_PLACEHOLDERS = {
+  door_01:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="38" y="40" width="44" height="82" rx="3" stroke="currentColor" stroke-width="1.6"/>' +
+    '<path d="M44 122 L44 46 L68 52 L68 118 Z" stroke="currentColor" stroke-width="1.4" opacity="0.7"/>' +
+    '<circle cx="63" cy="86" r="1.8" fill="currentColor" opacity="0.8"/>' +
+    '<path d="M74 62 L86 54 M74 76 L90 72 M74 90 L86 92" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>' +
+    '</svg>',
+  road_02:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M60 138 C60 116 60 104 60 92" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' +
+    '<path d="M60 92 C52 72 44 56 36 38" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' +
+    '<path d="M60 92 C68 72 76 56 84 38" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>' +
+    '<circle cx="36" cy="32" r="2.4" stroke="currentColor" stroke-width="1.3" opacity="0.7"/>' +
+    '<circle cx="84" cy="32" r="2.4" stroke="currentColor" stroke-width="1.3" opacity="0.7"/>' +
+    '</svg>',
+  circle_03:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="60" cy="66" r="34" stroke="currentColor" stroke-width="1.6"/>' +
+    '<circle cx="60" cy="122" r="4" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M60 128 L60 138" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>' +
+    '</svg>',
+  shapes_04:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M40 62 L56 94 L24 94 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>' +
+    '<circle cx="84" cy="80" r="16" stroke="currentColor" stroke-width="1.6"/>' +
+    '</svg>',
+  stairs_05:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M26 128 L46 128 L46 108 L66 108 L66 88 L86 88 L86 68 L98 68" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<circle cx="98" cy="52" r="2.4" stroke="currentColor" stroke-width="1.3" opacity="0.7"/>' +
+    '</svg>',
+  window_06:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="34" y="38" width="52" height="72" rx="3" stroke="currentColor" stroke-width="1.6"/>' +
+    '<path d="M60 38 L60 110 M34 74 L86 74" stroke="currentColor" stroke-width="1.3" opacity="0.7"/>' +
+    '<path d="M40 126 L80 126" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>' +
+    '</svg>',
+  generic:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
+    '<circle cx="60" cy="80" r="2.2" fill="currentColor" opacity="0.8"/>' +
+    '</svg>'
+};
+
+// Screen states: choosing -> revealing -> observing -> associating -> result
+const Assoc = {
+  state: 'choosing',
+  spread: [],
+  chosenCard: null,
+  lastChosenId: null,
+  busy: false,
+  timers: [],
+
+  setTimer(fn, ms) {
+    this.timers.push(setTimeout(fn, ms));
+  },
+
+  clearTimers() {
+    this.timers.forEach(clearTimeout);
+    this.timers = [];
+  },
+
+  // 4 unique cards; avoids repeating the just-chosen card when the deck allows
+  sampleSpread() {
+    let pool = ASSOCIATION_DECK;
+    if (this.lastChosenId && pool.length - 1 >= 4) {
+      pool = pool.filter(c => c.id !== this.lastChosenId);
+    }
+    const copy = pool.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy.slice(0, Math.min(4, copy.length));
+  }
+};
+
+// Card front: real image when available, CSS/SVG placeholder otherwise.
+// The placeholder stays visible until the image actually loads, so a broken
+// image icon can never appear.
+function renderAssocFront(container, card) {
+  container.innerHTML = '<span class="assoc-placeholder" aria-hidden="true">' +
+    (ASSOC_PLACEHOLDERS[card.id] || ASSOC_PLACEHOLDERS.generic) + '</span>';
+  if (card.image) {
+    const img = new Image();
+    img.className = 'assoc-image';
+    img.alt = card.title || '';
+    img.onload = () => {
+      container.innerHTML = '';
+      container.appendChild(img);
+    };
+    img.src = card.image;
+  }
+}
+
+function startAssocRound() {
+  Assoc.clearTimers();
+  Assoc.state = 'choosing';
+  Assoc.busy = false;
+  Assoc.chosenCard = null;
+  Assoc.spread = Assoc.sampleSpread();
+
+  document.getElementById('assocSubtitle').style.display = 'block';
+  document.getElementById('assocStage').style.display = 'none';
+  document.getElementById('assocQuestion').style.display = 'none';
+  document.getElementById('assocResult').style.display = 'none';
+  document.getElementById('assocAgainBtn').style.display = 'none';
+  document.getElementById('assocBigCard').classList.remove('assoc-card--flipped');
+
+  const grid = document.getElementById('assocGrid');
+  grid.style.display = 'grid';
+  grid.innerHTML = '';
+  Assoc.spread.forEach((card, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'assoc-card assoc-card--enter';
+    btn.style.animationDelay = (i * 70) + 'ms';
+    btn.setAttribute('aria-label', 'Закрытая карта ' + (i + 1));
+    btn.innerHTML = '<span class="assoc-back" aria-hidden="true"></span>';
+    btn.addEventListener('click', () => chooseAssocCard(card, btn));
+    grid.appendChild(btn);
+  });
+}
+
+function chooseAssocCard(card, btn) {
+  if (Assoc.busy || Assoc.state !== 'choosing') return;
+  Assoc.busy = true;
+  Assoc.state = 'revealing';
+  Assoc.chosenCard = card;
+  Assoc.lastChosenId = card.id;
+  haptic('light');
+
+  // Prepare the big card, back side up, with this card's face
+  renderAssocFront(document.getElementById('assocBigFront'), card);
+  const bigCard = document.getElementById('assocBigCard');
+  bigCard.classList.remove('assoc-card--flipped');
+
+  const grid = document.getElementById('assocGrid');
+  const subtitle = document.getElementById('assocSubtitle');
+  const stage = document.getElementById('assocStage');
+
+  if (DiceThought.prefersReducedMotion()) {
+    // Short reveal without movement or a long flip
+    grid.style.display = 'none';
+    subtitle.style.display = 'none';
+    stage.style.display = 'flex';
+    bigCard.classList.add('assoc-card--flipped');
+    haptic('select');
+    Assoc.setTimer(showAssocQuestion, 350);
+    return;
+  }
+
+  // The other three fade out; the chosen card drifts to the spread center
+  const gridRect = grid.getBoundingClientRect();
+  const rect = btn.getBoundingClientRect();
+  const dx = (gridRect.left + gridRect.width / 2) - (rect.left + rect.width / 2);
+  const dy = (gridRect.top + gridRect.height / 2) - (rect.top + rect.height / 2);
+  Array.from(grid.children).forEach(el => {
+    if (el !== btn) el.classList.add('assoc-card--dismissed');
+  });
+  btn.classList.add('assoc-card--chosen');
+  btn.style.transform = `translate(${dx}px, ${dy}px) scale(1.12)`;
+
+  Assoc.setTimer(() => {
+    // Swap to the centered stage card and flip it
+    grid.style.display = 'none';
+    subtitle.style.display = 'none';
+    stage.style.display = 'flex';
+    Assoc.setTimer(() => {
+      Assoc.state = 'observing';
+      bigCard.classList.add('assoc-card--flipped');
+      haptic('select');
+      // A quiet moment to just look at the image before the prompt appears
+      Assoc.setTimer(showAssocQuestion, 600 + 550);
+    }, 60);
+  }, 440);
+}
+
+function showAssocQuestion() {
+  const card = Assoc.chosenCard;
+  if (!card) return;
+  Assoc.state = 'associating';
+
+  const options = document.getElementById('assocOptions');
+  options.innerHTML = '';
+  card.elements.forEach(element => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'assoc-option';
+    b.textContent = element.label;
+    b.addEventListener('click', () => chooseAssocElement(element));
+    options.appendChild(b);
+  });
+
+  document.getElementById('assocQuestion').style.display = 'block';
+  Assoc.busy = false;
+}
+
+function chooseAssocElement(element) {
+  if (Assoc.state !== 'associating') return;
+  Assoc.state = 'result';
+  haptic('select');
+
+  document.getElementById('assocQuestion').style.display = 'none';
+  document.getElementById('assocChoice').textContent = element.label;
+  document.getElementById('assocInsight').textContent = element.insight;
+  document.getElementById('assocReflection').textContent = element.question;
+  document.getElementById('assocResult').style.display = 'block';
+  document.getElementById('assocAgainBtn').style.display = 'flex';
+
+  // Keep the top of the card in view when the result stretches the page
+  const stage = document.getElementById('assocStage');
+  if (stage.getBoundingClientRect().top < 0) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function openAssocScreen() {
+  document.getElementById('modesScreen').style.display = 'none';
+  document.getElementById('assocScreen').style.display = 'flex';
+  document.body.classList.add('hide-home-hero');
+  startAssocRound();
+  window.scrollTo(0, 0);
+}
+
+document.getElementById('assocBackBtn').addEventListener('click', () => {
+  haptic('select');
+  Assoc.clearTimers();
+  Assoc.state = 'choosing';
+  Assoc.busy = false;
+  document.body.classList.remove('hide-home-hero');
+  document.getElementById('assocScreen').style.display = 'none';
+  document.getElementById('modesScreen').style.display = 'flex';
+});
+
+document.getElementById('assocAgainBtn').addEventListener('click', () => {
+  haptic('light');
+  startAssocRound();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // Initialize
