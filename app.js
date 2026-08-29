@@ -1207,6 +1207,37 @@ const ASSOCIATION_DECK = [
         question: 'Что в этих отношениях тебе хочется успеть сказать, пока светло?'
       }
     ]
+  },
+  {
+    id: 'A012',
+    internalName: 'Мост доверия',
+    image: 'assets/association-cards/A012.webp',
+    elements: [
+      {
+        id: 'lantern',
+        label: 'Фонарь',
+        insight: 'Возможно, тебе сейчас важно, чтобы кто-то оставлял для тебя свет — маленький знак, что тебя ждут на той стороне.',
+        question: 'Кто зажигает свет для тебя — и для кого его зажигаешь ты?'
+      },
+      {
+        id: 'ropes',
+        label: 'Верёвочные перила',
+        insight: 'Держаться за что-то — не слабость. Возможно, тебе сейчас хочется убедиться, что опора выдержит, прежде чем сделать шаг навстречу.',
+        question: 'За что ты держишься в этих отношениях — и насколько этой опоре можно доверять?'
+      },
+      {
+        id: 'fog_ahead',
+        label: 'Туман впереди',
+        insight: 'Конца моста не видно, и это может тревожить. Но, возможно, сейчас важнее не разглядеть финал, а идти, пока он понемногу проясняется.',
+        question: 'Готова ли ты идти навстречу, не зная заранее, что ждёт на другой стороне?'
+      },
+      {
+        id: 'planks',
+        label: 'Доски под ногами',
+        insight: 'Каждый шаг по такому мосту — маленькое решение довериться. Возможно, ты сейчас проверяешь на прочность то, на чём держится ваша связь.',
+        question: 'Какой маленький шаг доверия ты могла бы сделать первой?'
+      }
+    ]
   }
 ];
 
@@ -1314,6 +1345,17 @@ const ASSOC_PLACEHOLDERS = {
     '<path d="M46 96 C52 92 58 100 64 96 C70 92 76 100 74 96" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>' +
     '<path d="M48 108 C54 104 60 112 66 108 C72 104 78 112 72 108" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.35"/>' +
     '<circle cx="60" cy="44" r="7" stroke="currentColor" stroke-width="1.3" opacity="0.55"/>' +
+    '</svg>',
+  // Мост доверия: подвесной мост в перспективе, фонарь
+  A012:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M26 60 L26 124 M94 60 L94 124" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>' +
+    '<path d="M26 78 C42 90 78 90 94 78" stroke="currentColor" stroke-width="1.3" opacity="0.6"/>' +
+    '<path d="M40 118 L80 118 M44 108 L76 108 M48 99 L72 99 M51 91 L69 91 M54 84 L66 84" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>' +
+    '<path d="M40 118 L54 76 M80 118 L66 76" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>' +
+    '<path d="M26 60 C30 52 34 52 36 56" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>' +
+    '<circle cx="38" cy="62" r="5" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<circle cx="38" cy="62" r="1.6" fill="currentColor" opacity="0.8"/>' +
     '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
