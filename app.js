@@ -1175,6 +1175,38 @@ const ASSOCIATION_DECK = [
         question: 'Не стала ли одна проблема занимать в твоей голове больше места, чем она занимает в жизни?'
       }
     ]
+  },
+  // --- Серия про отношения ---
+  {
+    id: 'A011',
+    internalName: 'Два берега',
+    image: 'assets/association-cards/A011.webp',
+    elements: [
+      {
+        id: 'two_people',
+        label: 'Двое',
+        insight: 'Возможно, для тебя сейчас главное не расстояние, а то, что вы всё ещё повёрнуты друг к другу.',
+        question: 'Что помогает вам оставаться лицом друг к другу, даже когда сблизиться пока не получается?'
+      },
+      {
+        id: 'water_between',
+        label: 'Вода между ними',
+        insight: 'Иногда мы лучше видим то, что разделяет, чем то, что соединяет. Возможно, дистанция сейчас кажется главной частью этой истории.',
+        question: 'Из чего на самом деле состоит это расстояние — и кто его поддерживает?'
+      },
+      {
+        id: 'reflection',
+        label: 'Отражение в воде',
+        insight: 'Возможно, тебе сейчас важнее не сами события, а то, как они отзываются внутри. Отражения говорят тише, но часто точнее.',
+        question: 'Что из этой истории продолжает отражаться в тебе, даже когда вы не рядом?'
+      },
+      {
+        id: 'sunset',
+        label: 'Закат',
+        insight: 'Мягкий свет над водой не обязательно означает конец — иногда это просто время суток, которое напоминает о времени вообще.',
+        question: 'Что в этих отношениях тебе хочется успеть сказать, пока светло?'
+      }
+    ]
   }
 ];
 
@@ -1270,6 +1302,18 @@ const ASSOC_PLACEHOLDERS = {
     '<circle cx="34" cy="88" r="3.4" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
     '<path d="M34 92 L34 104" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>' +
     '<circle cx="70" cy="66" r="2.6" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
+    '</svg>',
+  // Два берега: двое напротив, вода между ними, закат
+  A011:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="30" cy="64" r="3.4" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M30 68 L30 80" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>' +
+    '<circle cx="90" cy="64" r="3.4" stroke="currentColor" stroke-width="1.4" opacity="0.7"/>' +
+    '<path d="M90 68 L90 80" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.7"/>' +
+    '<path d="M18 84 L42 84 M78 84 L102 84" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>' +
+    '<path d="M46 96 C52 92 58 100 64 96 C70 92 76 100 74 96" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>' +
+    '<path d="M48 108 C54 104 60 112 66 108 C72 104 78 112 72 108" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.35"/>' +
+    '<circle cx="60" cy="44" r="7" stroke="currentColor" stroke-width="1.3" opacity="0.55"/>' +
     '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
