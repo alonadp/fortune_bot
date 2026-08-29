@@ -1238,6 +1238,37 @@ const ASSOCIATION_DECK = [
         question: 'Какой маленький шаг доверия ты могла бы сделать первой?'
       }
     ]
+  },
+  {
+    id: 'A013',
+    internalName: 'Ожидание',
+    image: 'assets/association-cards/A013.webp',
+    elements: [
+      {
+        id: 'sitting_figure',
+        label: 'Сидящая у воды',
+        insight: 'Она не выглядит потерянной — скорее тихой. Возможно, ожидание для тебя сейчас не пустота, а способ побыть с собой.',
+        question: 'Чем наполнено твоё ожидание, когда никто не видит?'
+      },
+      {
+        id: 'boat_nearby',
+        label: 'Лодка у берега',
+        insight: 'Лодка совсем рядом, но пока не движется. Возможно, ты ждёшь, что кто-то приплывёт, — или сама решаешь, отплывать ли.',
+        question: 'Ты ждёшь чьего-то шага — или сама держишь лодку у берега?'
+      },
+      {
+        id: 'lantern_light',
+        label: 'Фонарь рядом',
+        insight: 'Маленький огонь горит, даже когда вокруг темнеет. Возможно, в тебе тоже есть что-то, что продолжает светить, пока ты ждёшь.',
+        question: 'Что поддерживает в тебе этот тихий свет — и для кого он горит?'
+      },
+      {
+        id: 'sunset_water',
+        label: 'Закат над водой',
+        insight: 'Свет уходит медленно, и в этом нет спешки. Возможно, тебе сейчас важно разрешить себе не торопить события.',
+        question: 'Что изменится, если позволить этому времени просто идти — не ускоряя его?'
+      }
+    ]
   }
 ];
 
@@ -1356,6 +1387,18 @@ const ASSOC_PLACEHOLDERS = {
     '<path d="M26 60 C30 52 34 52 36 56" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>' +
     '<circle cx="38" cy="62" r="5" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
     '<circle cx="38" cy="62" r="1.6" fill="currentColor" opacity="0.8"/>' +
+    '</svg>',
+  // Ожидание: фигура на причале, фонарь, закат над водой
+  A013:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="60" cy="52" r="8" stroke="currentColor" stroke-width="1.3" opacity="0.6"/>' +
+    '<path d="M18 66 L102 66" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>' +
+    '<circle cx="54" cy="84" r="4" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M54 88 C48 92 46 98 47 104 L60 104 C61 96 58 92 54 88 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<path d="M30 110 L90 118 M34 120 L86 128" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.55"/>' +
+    '<rect x="72" y="96" width="8" height="11" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.8"/>' +
+    '<circle cx="76" cy="101.5" r="1.5" fill="currentColor" opacity="0.85"/>' +
+    '<path d="M84 74 C90 71 96 77 102 74" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>' +
     '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
