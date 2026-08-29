@@ -962,7 +962,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A004',
     internalName: 'Мост',
-    image: null,
+    image: 'assets/association-cards/A004.webp',
     elements: [
       {
         id: 'bridge',
