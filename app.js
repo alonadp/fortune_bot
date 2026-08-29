@@ -993,7 +993,7 @@ const ASSOCIATION_DECK = [
   {
     id: 'A005',
     internalName: 'Открытая клетка',
-    image: null,
+    image: 'assets/association-cards/A005.webp',
     elements: [
       {
         id: 'bird',
