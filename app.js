@@ -163,6 +163,9 @@ const predictions = {
 let currentMode = null;
 let flipCount = 0;
 let dailyFlips = 0;
+// Accumulated coin rotation so every toss spins forward from its current pose
+let coinRotX = 0;
+let coinRotY = 0;
 let lastFlipDate = null;
 let history = [];
 
@@ -494,9 +497,14 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
     document.getElementById('prediction').innerHTML = '<p>Нажми, чтобы узнать свою судьбу</p>';
     document.getElementById('actionBtn').querySelector('span').textContent = 'Узнать';
     
-    // Reset transformations
+    // Reset transformations (instantly, without playing the flip transition)
     const coinInner = document.querySelector('.coin-inner');
-    if (coinInner) coinInner.style.transform = 'rotateY(0deg)';
+    if (coinInner) {
+      coinInner.style.transitionDuration = '0ms';
+      coinInner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    }
+    coinRotX = 0;
+    coinRotY = 0;
     
     const cardInner = document.querySelector('.card-inner');
     if (cardInner) cardInner.style.transform = 'rotateY(0deg)';
@@ -614,17 +622,42 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
   } else if (currentMode === 'yesno') {
     // Coin flip - YES/NO only
     const coinInner = document.querySelector('.coin-inner');
+    const coinEl = document.getElementById('coin');
     
-    // Determine result FIRST
+    // Determine result FIRST — the animation only visualizes it
     const isYes = Math.random() < 0.5;
     
-    // Calculate rotation: 3-5 full spins + exact final position
-    const spins = (Math.floor(Math.random() * 3) + 3) * 360; // 1080, 1440, or 1800 degrees
-    const finalRotation = spins + (isYes ? 0 : 180); // Stop exactly at 0° (YES) or 180° (NO)
+    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let tossDuration;
     
-    coinInner.style.transform = `rotateY(${finalRotation}deg)`;
+    if (reducedMotion) {
+      // Short direct flip to the result, no lift and no long spin
+      tossDuration = 300;
+      coinRotX = isYes ? 0 : 180;
+      coinRotY = 0;
+      coinInner.style.transitionDuration = '250ms';
+      coinInner.style.transform = `rotateX(${coinRotX}deg) rotateY(${coinRotY}deg)`;
+    } else {
+      tossDuration = 1400;
+      // 3-5 fast X flips plus one gentle Y turn, landing exactly on ДА (0°) or НЕТ (180°)
+      const spins = (Math.floor(Math.random() * 3) + 3) * 360;
+      const baseX = coinRotX + spins;
+      const finalFace = isYes ? 0 : 180;
+      coinRotX = baseX + ((((finalFace - baseX) % 360) + 360) % 360);
+      coinRotY += 360;
+      
+      coinInner.style.transitionDuration = tossDuration + 'ms';
+      coinInner.style.transform = `rotateX(${coinRotX}deg) rotateY(${coinRotY}deg)`;
+      
+      // Lift / land / settle arc on the coin container
+      coinEl.style.setProperty('--coin-toss-duration', tossDuration + 'ms');
+      coinEl.classList.remove('coin--toss');
+      void coinEl.offsetWidth;
+      coinEl.classList.add('coin--toss');
+    }
     
     setTimeout(() => {
+      coinEl.classList.remove('coin--toss');
       haptic('medium');
       
       const result = isYes ? 'yes' : 'no';
@@ -654,7 +687,7 @@ document.getElementById('actionBtn').addEventListener('click', async () => {
           }
         }
       }, 1000);
-    }, 1200);
+    }, tossDuration + 60);
     
   } else if (currentMode === 'day') {
     // Daily prediction - check cache
