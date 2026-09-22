@@ -1091,6 +1091,18 @@ const ASSOC_PLACEHOLDERS = {
     '<circle cx="65" cy="115" r="2.2" fill="currentColor" opacity="0.8"/>' +
     '<path d="M58 122 C62 118 68 118 72 122" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>' +
     '</svg>',
+  // Тишина у воды: фигура на причале, озеро, дневник, фонарь
+  A018:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="58" cy="78" r="4.5" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M58 83 C52 87 50 94 51 102 L65 102 C66 94 64 87 58 83 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<path d="M14 66 L106 66 M18 74 C34 70 86 70 102 74 M22 82 C40 78 80 78 98 82" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>' +
+    '<rect x="68" y="92" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.8"/>' +
+    '<path d="M70 96 H82 M70 100 H80" stroke="currentColor" stroke-width="1" opacity="0.45"/>' +
+    '<rect x="84" y="88" width="10" height="14" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.85"/>' +
+    '<circle cx="89" cy="94" r="2" fill="currentColor" opacity="0.85"/>' +
+    '<circle cx="60" cy="48" r="8" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
