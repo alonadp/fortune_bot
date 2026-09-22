@@ -1080,6 +1080,17 @@ const ASSOC_PLACEHOLDERS = {
     '<path d="M66 124 C76 130 84 138 90 148" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.45"/>' +
     '<circle cx="32" cy="118" r="6" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
     '</svg>',
+  // Невысказанное: письмо, ключ, открытая дверь, пустой стул
+  A017:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="72" y="38" width="28" height="52" rx="2" stroke="currentColor" stroke-width="1.5" opacity="0.85"/>' +
+    '<path d="M72 38 L86 52 L100 38" stroke="currentColor" stroke-width="1.3" opacity="0.6"/>' +
+    '<path d="M28 52 V118 M28 52 H52 V118 M28 85 H52" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.75"/>' +
+    '<path d="M34 118 V128 M34 128 H46 V118" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>' +
+    '<rect x="54" y="108" width="22" height="14" rx="2" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<circle cx="65" cy="115" r="2.2" fill="currentColor" opacity="0.8"/>' +
+    '<path d="M58 122 C62 118 68 118 72 122" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
