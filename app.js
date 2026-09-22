@@ -1225,6 +1225,19 @@ const ASSOC_PLACEHOLDERS = {
     '<circle cx="92" cy="94" r="1.6" fill="currentColor" opacity="0.55"/>' +
     '<path d="M68 118 L68 128 M64 128 H72" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>' +
     '</svg>',
+  // Забота о себе: цветы, чистые страницы, свеча, камни
+  A029:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="38" y="78" width="44" height="32" rx="2" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M60 78 L60 110" stroke="currentColor" stroke-width="1.1" opacity="0.45"/>' +
+    '<path d="M28 52 C34 46 40 48 44 54 C48 48 54 46 60 52" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.65"/>' +
+    '<circle cx="36" cy="56" r="2" fill="currentColor" opacity="0.55"/>' +
+    '<circle cx="52" cy="54" r="2" fill="currentColor" opacity="0.55"/>' +
+    '<rect x="78" y="44" width="8" height="14" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.8"/>' +
+    '<circle cx="82" cy="48" r="2" fill="currentColor" opacity="0.85"/>' +
+    '<circle cx="88" cy="100" r="3" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>' +
+    '<circle cx="94" cy="106" r="2.2" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
