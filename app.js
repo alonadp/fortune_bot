@@ -1177,6 +1177,20 @@ const ASSOC_PLACEHOLDERS = {
     '<ellipse cx="58" cy="108" rx="9" ry="5" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
     '<path d="M54 108 L54 116" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>' +
     '</svg>',
+  // Желания: девушка у окна, карта, фотографии
+  A025:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="20" y="36" width="48" height="38" rx="2" stroke="currentColor" stroke-width="1.4" opacity="0.7"/>' +
+    '<circle cx="32" cy="48" r="6" stroke="currentColor" stroke-width="1.1" opacity="0.45"/>' +
+    '<circle cx="78" cy="70" r="4" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M78 74 C72 78 70 86 71 94 L85 94 C86 86 84 78 78 74 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<path d="M38 88 L38 102" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.65"/>' +
+    '<rect x="48" y="100" width="22" height="16" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
+    '<path d="M50 104 H68 M52 108 H66" stroke="currentColor" stroke-width="1" opacity="0.4"/>' +
+    '<rect x="72" y="108" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.1" opacity="0.55"/>' +
+    '<rect x="84" y="112" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.1" opacity="0.45"/>' +
+    '<circle cx="44" cy="32" r="10" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
