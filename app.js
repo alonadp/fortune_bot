@@ -1128,6 +1128,18 @@ const ASSOC_PLACEHOLDERS = {
     '<rect x="68" y="96" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>' +
     '<rect x="82" y="100" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
     '</svg>',
+  // Контроль или поток: часы, девушка у моря, записи
+  A021:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="34" cy="72" r="14" stroke="currentColor" stroke-width="1.5" opacity="0.85"/>' +
+    '<path d="M34 72 L34 64 M34 72 L40 76" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.8"/>' +
+    '<circle cx="60" cy="68" r="4" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>' +
+    '<path d="M60 72 C54 76 52 84 53 92 L67 92 C68 84 66 76 60 72 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.9"/>' +
+    '<path d="M14 78 C28 74 92 74 106 78 M18 86 C36 82 84 82 102 86 M22 94 C44 90 76 90 98 94" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>' +
+    '<rect x="72" y="108" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
+    '<path d="M74 112 H88 M74 116 H86" stroke="currentColor" stroke-width="1" opacity="0.45"/>' +
+    '<circle cx="60" cy="44" r="9" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
