@@ -1213,6 +1213,18 @@ const ASSOC_PLACEHOLDERS = {
     '<rect x="72" y="108" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>' +
     '<rect x="84" y="112" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
     '</svg>',
+  // Время для себя: часы, ключ, подарок, цветущая ветка
+  A028:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="32" cy="72" r="12" stroke="currentColor" stroke-width="1.4" opacity="0.8"/>' +
+    '<path d="M32 72 L32 64 M32 72 L38 76" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.75"/>' +
+    '<rect x="54" y="88" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.85"/>' +
+    '<path d="M54 88 L62 82 L70 88 L70 102 L54 102 Z" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
+    '<path d="M78 108 C82 100 88 98 94 102" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.65"/>' +
+    '<circle cx="86" cy="98" r="2" fill="currentColor" opacity="0.7"/>' +
+    '<circle cx="92" cy="94" r="1.6" fill="currentColor" opacity="0.55"/>' +
+    '<path d="M68 118 L68 128 M64 128 H72" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
