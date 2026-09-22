@@ -1116,6 +1116,18 @@ const ASSOC_PLACEHOLDERS = {
     '<rect x="26" y="92" width="6" height="5" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>' +
     '<path d="M48 118 C56 112 64 112 72 118" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>' +
     '</svg>',
+  // То, что осталось: девушка у окна, дневник, фотографии
+  A020:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="28" y="34" width="44" height="40" rx="2" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>' +
+    '<path d="M28 54 H72 M50 34 V74" stroke="currentColor" stroke-width="1.1" opacity="0.4"/>' +
+    '<circle cx="36" cy="44" r="1.5" fill="currentColor" opacity="0.5"/><circle cx="42" cy="48" r="1.2" fill="currentColor" opacity="0.45"/>' +
+    '<circle cx="52" cy="78" r="4" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M52 82 C46 86 44 94 45 102 L59 102 C60 94 58 86 52 82 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<path d="M36 108 C48 102 54 102 60 106 C66 102 72 102 84 108 L84 126 C72 120 60 120 60 124 C60 120 48 120 36 126 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<rect x="68" y="96" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>' +
+    '<rect x="82" y="100" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
