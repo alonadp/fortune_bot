@@ -1140,6 +1140,18 @@ const ASSOC_PLACEHOLDERS = {
     '<path d="M74 112 H88 M74 116 H86" stroke="currentColor" stroke-width="1" opacity="0.45"/>' +
     '<circle cx="60" cy="44" r="9" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
     '</svg>',
+  // Свобода: фигура с руками в стороны, шары, карта
+  A022:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="60" cy="56" r="4.5" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>' +
+    '<path d="M44 68 L76 68 M48 64 L44 68 L48 72 M72 64 L76 68 L72 72" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/>' +
+    '<path d="M60 61 L60 78" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<ellipse cx="28" cy="42" rx="7" ry="9" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
+    '<ellipse cx="88" cy="48" rx="6" ry="8" stroke="currentColor" stroke-width="1.2" opacity="0.45"/>' +
+    '<rect x="72" y="108" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.7"/>' +
+    '<rect x="24" y="112" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
+    '<circle cx="60" cy="34" r="8" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
