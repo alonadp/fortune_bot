@@ -1152,6 +1152,19 @@ const ASSOC_PLACEHOLDERS = {
     '<rect x="24" y="112" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
     '<circle cx="60" cy="34" r="8" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
     '</svg>',
+  // Усталость: девушка с книгой, окно, кружка
+  A023:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="78" y="32" width="26" height="44" rx="2" stroke="currentColor" stroke-width="1.5" opacity="0.75"/>' +
+    '<circle cx="86" cy="44" r="1.2" fill="currentColor" opacity="0.5"/><circle cx="94" cy="50" r="1" fill="currentColor" opacity="0.45"/>' +
+    '<circle cx="48" cy="72" r="4.2" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M48 76 C42 80 40 88 41 96 L55 96 C56 88 54 80 48 76 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<path d="M38 88 L38 102" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.7"/>' +
+    '<rect x="52" y="92" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.8"/>' +
+    '<path d="M54 96 H66" stroke="currentColor" stroke-width="1" opacity="0.45"/>' +
+    '<path d="M28 112 L52 108" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.65"/>' +
+    '<ellipse cx="34" cy="118" rx="8" ry="5" stroke="currentColor" stroke-width="1.3" opacity="0.7"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
