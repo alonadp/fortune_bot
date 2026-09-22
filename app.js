@@ -1165,6 +1165,18 @@ const ASSOC_PLACEHOLDERS = {
     '<path d="M28 112 L52 108" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.65"/>' +
     '<ellipse cx="34" cy="118" rx="8" ry="5" stroke="currentColor" stroke-width="1.3" opacity="0.7"/>' +
     '</svg>',
+  // Маленькие радости: девушка, цветы, чашка, свет из окна
+  A024:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M18 40 L18 120 M18 40 H42 M18 70 H38" stroke="currentColor" stroke-width="1.4" opacity="0.55"/>' +
+    '<path d="M24 48 L30 44 L36 50 L42 46" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>' +
+    '<circle cx="72" cy="68" r="4" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M72 72 C66 76 64 84 65 92 L79 92 C80 84 78 76 72 72 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<path d="M78 64 L84 58 L90 64 L96 58" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>' +
+    '<path d="M52 88 C56 82 62 80 68 84 C74 80 80 82 84 88" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.65"/>' +
+    '<ellipse cx="58" cy="108" rx="9" ry="5" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
+    '<path d="M54 108 L54 116" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
