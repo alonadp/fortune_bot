@@ -1202,6 +1202,17 @@ const ASSOC_PLACEHOLDERS = {
     '<path d="M34 108 L34 118 M30 118 H38" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>' +
     '<circle cx="48" cy="112" r="2" fill="currentColor" opacity="0.7"/>' +
     '</svg>',
+  // Вдохновение: закат над морем, блокнот, фотографии
+  A027:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="60" cy="42" r="10" stroke="currentColor" stroke-width="1.3" opacity="0.55"/>' +
+    '<path d="M14 72 C32 68 88 68 106 72 M18 80 C36 76 84 76 102 80" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>' +
+    '<rect x="38" y="96" width="28" height="20" rx="2" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M52 96 L52 116" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>' +
+    '<path d="M42 102 H62 M42 106 H60" stroke="currentColor" stroke-width="1" opacity="0.35"/>' +
+    '<rect x="72" y="108" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>' +
+    '<rect x="84" y="112" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
