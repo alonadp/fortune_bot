@@ -1238,6 +1238,18 @@ const ASSOC_PLACEHOLDERS = {
     '<circle cx="88" cy="100" r="3" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>' +
     '<circle cx="94" cy="106" r="2.2" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>' +
     '</svg>',
+  // Новый горизонт: путешествие, компас, дорога, новые впечатления
+  A030:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="36" cy="52" r="14" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
+    '<ellipse cx="36" cy="52" rx="14" ry="6" stroke="currentColor" stroke-width="1.1" opacity="0.45"/>' +
+    '<path d="M22 52 H50 M36 38 V66" stroke="currentColor" stroke-width="1" opacity="0.4"/>' +
+    '<circle cx="34" cy="108" r="11" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>' +
+    '<path d="M34 97 V34 M34 108 L42 116" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.8"/>' +
+    '<path d="M52 118 C62 112 72 114 82 108 C92 102 98 92 104 88" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.65"/>' +
+    '<path d="M48 132 H96" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>' +
+    '<circle cx="88" cy="72" r="8" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
