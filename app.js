@@ -1191,6 +1191,17 @@ const ASSOC_PLACEHOLDERS = {
     '<rect x="84" y="112" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1.1" opacity="0.45"/>' +
     '<circle cx="44" cy="32" r="10" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>' +
     '</svg>',
+  // Возможность: открытая дверь, ключ, чемодан, дорога
+  A026:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect x="52" y="32" width="36" height="72" rx="2" stroke="currentColor" stroke-width="1.5" opacity="0.85"/>' +
+    '<path d="M58 32 L58 104 L82 96 L82 40 Z" stroke="currentColor" stroke-width="1.3" opacity="0.55"/>' +
+    '<path d="M78 54 L90 46 M78 68 L94 64" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>' +
+    '<path d="M28 118 C40 112 52 108 64 106 C76 104 88 108 98 114" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>' +
+    '<rect x="22" y="88" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
+    '<path d="M34 108 L34 118 M30 118 H38" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>' +
+    '<circle cx="48" cy="112" r="2" fill="currentColor" opacity="0.7"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
