@@ -1103,6 +1103,19 @@ const ASSOC_PLACEHOLDERS = {
     '<circle cx="89" cy="94" r="2" fill="currentColor" opacity="0.85"/>' +
     '<circle cx="60" cy="48" r="8" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>' +
     '</svg>',
+  // Куда дальше: указатель, карта, дом вдали, фигура с рюкзаком
+  A019:
+    '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M78 36 L78 72" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>' +
+    '<path d="M62 46 L94 46 L100 51 L94 56 L62 56 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.85"/>' +
+    '<circle cx="54" cy="82" r="4.2" stroke="currentColor" stroke-width="1.4" opacity="0.9"/>' +
+    '<path d="M54 86 C48 90 46 98 47 106 L61 106 C62 98 60 90 54 86 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" opacity="0.9"/>' +
+    '<rect x="64" y="78" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3" opacity="0.75"/>' +
+    '<path d="M66 82 H76 M66 85 H74" stroke="currentColor" stroke-width="1" opacity="0.45"/>' +
+    '<path d="M22 98 L34 90 L34 102 Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" opacity="0.55"/>' +
+    '<rect x="26" y="92" width="6" height="5" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>' +
+    '<path d="M48 118 C56 112 64 112 72 118" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>' +
+    '</svg>',
   generic:
     '<svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">' +
     '<rect x="46" y="66" width="28" height="28" rx="3" transform="rotate(45 60 80)" stroke="currentColor" stroke-width="1.6"/>' +
